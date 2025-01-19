@@ -1,0 +1,16 @@
+:root {
+  --global-background-color: linear-gradient(#ccc, #fff);
+  --global-text-color: #333;
+
+  --test: red;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    // Global
+    --global-background-color: linear-gradient(#333, #111);
+    --global-text-color: #fff;
+
+    --test: lime;
+  }
+}
