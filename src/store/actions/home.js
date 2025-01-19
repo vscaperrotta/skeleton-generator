@@ -13,27 +13,6 @@ export const actionTypes = {
   // @generator action:action-typemethodmethodmethod
 }
 
-// export const fetchPostsRequest = (payload) => {
-//   return {
-//     type: 'FETCH_POSTS_REQUEST',
-//     payload: payload
-//   }
-// }
-
-// export const fetchPostsSuccess = (payload) => {
-//   return {
-//     type: 'FETCH_POSTS_SUCCESS',
-//     payload: payload
-//   }
-// }
-
-// export const fetchPostsFailure = (payload) => {
-//   return {
-//     type: 'FETCH_POSTS_FAILURE',
-//     payload: payload
-//   }
-// }
-
 /** action
  *
  * @name doExample

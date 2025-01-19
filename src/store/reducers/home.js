@@ -5,18 +5,6 @@ const ACTION_HANDLERS = {
   [actionTypes.DO_EXAMPLE]: produce((draft, action) => {
     draft.example = action.payload;
   }),
-  // ['FETCH_POSTS_REQUEST']: produce((draft, action) => {
-  //   draft.loading = true;
-  //   draft.error = null;
-  // }),
-  // ['FETCH_POSTS_SUCCESS']: produce((draft, action) => {
-  //   draft.loading = false;
-  //   draft.data.users = action.payload;
-  // }),
-  // ['FETCH_POSTS_FAILURE']: produce((draft, action) => {
-  //   draft.loading = false;
-  //   draft.error = action.payload;
-  // }),
   // @generator reducer:type:action
 };
 

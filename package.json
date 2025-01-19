@@ -1,9 +1,9 @@
 {
-  "name": "react-fe-arch",
-  "displayName": "Frontend Ark",
+  "name": "skeleton-generator",
+  "displayName": "Skeleton Generator",
   "private": true,
   "version": "1.1.5",
-  "description": "Frontend architecture based on ViteJS and ReactJs",
+  "description": "Tool to generate skeletons",
   "main": "index.jsx",
   "author": "Vittorio Scaperrotta",
   "type": "module",

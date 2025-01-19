@@ -23,15 +23,11 @@ const Home = (props) => {
   return (
     <div className="container">
       <header>
-        <h3>Frontend Ark Scaffolding</h3>
+        <h1>Home</h1>
       </header>
       <br />
       <main>
-        <h5>
-          {example}
-        </h5>
-        <br />
-        <button onClick={() => handleClick()}>CLICK</button>
+        <p>Scaffolding</p>
       </main>
     </div>
   );
