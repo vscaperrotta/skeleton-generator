@@ -1,5 +1,4 @@
-import '../src/styles/global.scss';
-import '../src/styles/storybook.scss';
+import '../src/styles/maih.scss';
 
 const preview = {
   parameters: {

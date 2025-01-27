@@ -28,13 +28,6 @@ const componentGenerator = {
       },
       {
         type: 'add',
-        path: '../src/routes/{{properCase routeName}}/{{properCase routeName}}Container.js',
-        templateFile: './route/templates/container.js.hbs',
-        abortOnFail: true,
-        skipIfExists: true,
-      },
-      {
-        type: 'add',
         path: '../src/routes/{{properCase routeName}}/{{properCase routeName}}.scss',
         templateFile: './route/templates/style.scss.hbs',
         abortOnFail: true,

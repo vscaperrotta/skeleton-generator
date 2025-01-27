@@ -8,21 +8,48 @@
  * @since 31-Mar-2023
 */
 
-.container {
-  align-items: center;
+.home__container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 3rem;
-  min-height: 100vh;
-  text-align: center;
+  padding: 3.75rem;
+  min-height: calc(100vh - 12.5rem);
+
+  .main {
+    border: 1px dashed coral;
+    width: 100%;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr auto;
+    grid-gap: 3.75rem;
+    width: 100%;
+
+    @include respond(tab-land) {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr auto;
+    }
+  }
 }
 
-.caption {
-  line-height: 2.8rem;
-  max-width: 102.4rem;
-  margin: 0 auto 3rem;
-  opacity: .5;
+.Header {
+  border: 1px dashed limegreen;
+  width: 100%;
+}
+
+.Board {
+  border: 1px dashed lightseagreen;
+  width: 100%;
+}
+
+.CodeOutput {
+  border: 1px dashed magenta;
+  width: 100%;
+}
+
+.Settings {
+  border: 1px dashed yellow;
+  width: 100%;
 }

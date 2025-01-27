@@ -1,0 +1,60 @@
+/**
+ *
+ * Header Styles
+ *
+ * @version 1.0.0
+ *
+ * @author Vittorio Scaperrotta
+ * @since 21-Jan-2025
+*/
+
+.header__container {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 6rem 0;
+  width: 100%;
+
+  .header__title {
+    background: var(--header_title-color);
+    margin-bottom: .75rem;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .header__paragraph {
+    color: var(--header_paragraph-color);
+    line-height: 2rem;
+    margin-bottom: 5rem;
+  }
+
+  .header__actions {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 2.5rem;
+
+    @include respond(tab-port) {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+
+  // .header__placeholder {
+
+  //   &--strips {
+  //     background-color: var(--header_placeholder_strips-background-color);
+  //     height: 3rem;
+  //     margin-bottom: 1rem;
+  //     width: 100%;
+  //   }
+
+  //   &--squares {
+  //     background-color: var(--header_placeholder_squares-background-color);
+  //     height: 3rem;
+  //     margin-bottom: 1rem;
+  //     width: 100%;
+  //   }
+  // }
+}

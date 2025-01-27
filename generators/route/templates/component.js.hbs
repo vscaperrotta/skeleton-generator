@@ -7,7 +7,6 @@
 */
 
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { nullSafe } from '@utils/globalMethods';
 import './{{properCase routeName}}.scss';
@@ -24,13 +23,5 @@ const {{properCase routeName}} = () => {
     <h1>{{properCase routeName}}</h1>
   )
 }
-
-{{properCase routeName}}.propTypes = {
-  // Add props here
-};
-
-{{properCase routeName}}.defaultProps = {
-  // Add default props here
-};
 
 export default {{properCase routeName}};

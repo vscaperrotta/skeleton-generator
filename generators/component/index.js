@@ -9,12 +9,6 @@ const componentGenerator = {
       name: 'componentName',
       message: 'What\'s the name of the component?'
     },
-    {
-      type: 'confirm',
-      name: 'container',
-      message: 'Do you want to include container?',
-      default: false,
-    },
   ],
   actions: (data) => {
     data.username = utils.getAuthor();
@@ -54,16 +48,6 @@ const componentGenerator = {
         skipIfExists: true,
       },
     ];
-
-    if (data.container) {
-      actions.push({
-        type: 'add',
-        path: `${utils.getPath()}/components/{{properCase componentName}}/{{properCase componentName}}Container.js`,
-        templateFile: './component/templates/container.js.hbs',
-        abortOnFail: true,
-        skipIfExists: true,
-      });
-    }
 
     return actions
   }

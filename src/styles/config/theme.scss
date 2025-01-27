@@ -1,16 +1,54 @@
 :root {
-  --global-background-color: linear-gradient(#ccc, #fff);
-  --global-text-color: #333;
+  --root-background-color: linear-gradient(to top right, #fff, #ccc);
+  --root-text-color: #333;
 
-  --test: red;
+  // COMPONENTS
+  // Button
+  --button-color: #17D4A8;
+  --button_outlined-border: #17D4A8;
+  --button_outlined-hover-color: #fff;
+  --button_text-hover-color: #fff;
+
+  // Header
+  --header_title-color: linear-gradient(to right, #333, #111);
+  --header_paragraph-color: #666;
+  --header_placeholder_strips-background-color: red;
+  --header_placeholder_squares-background-color: red;
+
+  // Footer
+  --footer_container-background: linear-gradient(#fff, #ccc);
+  --footer_paragraph-color: #888;
+
+  // Board
+
+  // CodeOutput
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     // Global
-    --global-background-color: linear-gradient(#333, #111);
-    --global-text-color: #fff;
+    --root-background-color: linear-gradient(to top right, #333, #111);
+    --root-text-color: #fff;
 
-    --test: lime;
+    // COMPONENTS
+    // Button
+    --button-color: #17D4A8;
+    --button_outlined-border: #17D4A8;
+    --button_text-hover-color: #fff;
+    --button_outlined-hover-color: #fff;
+
+    // Header
+    --header_title-color: linear-gradient(to right, #fff, #ccc);
+    --header_paragraph-color: #999;
+    --header_placeholder_strips-background-color: lime;
+    --header_placeholder_squares-background-color: lime;
+
+    // Footer
+    --footer_container-background: linear-gradient(#333, #111);
+    --footer_paragraph-color: #888;
+
+    // Board
+
+    // CodeOutput
   }
 }

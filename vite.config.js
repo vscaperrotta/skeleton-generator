@@ -5,6 +5,9 @@ import paths from './config/paths';
 const APP_DIR = paths.appSrc;
 
 export default defineConfig({
+  server: {
+    open: true,
+  },
   plugins: [
     react()
   ],
@@ -25,14 +28,18 @@ export default defineConfig({
     enabled: true,
     lintFiles: ['**/*.js', '**/*.jsx'],
   },
-  // css: {
-  //   preprocessorOptions: {
-  //     scss: {
-  //       api: 'modern',
-  //       additionalData: `
-  //         @import "./src/styles/global.scss";
-  //       `,
-  //     },
-  //   },
-  // },
+  optimizeDeps: {
+    include: ['**/*.scss'], // Include all .scss files
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "/src/styles/maih.scss";`,
+      },
+    },
+  },
+  build: {
+    minify: "terser",
+    assetsDir: 'assets',
+  },
 });
