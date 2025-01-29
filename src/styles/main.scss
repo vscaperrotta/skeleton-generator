@@ -59,7 +59,6 @@ select:-webkit-autofill:focus {
 input::-webkit-inner-spin-button,
 input::-webkit-outer-spin-button {
   // hide Spinner in Input Number for every browser except firefox
-  appearance: none;
   margin: 0;
 }
 

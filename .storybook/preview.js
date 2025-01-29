@@ -1,4 +1,4 @@
-import '../src/styles/maih.scss';
+import '../src/styles/main.scss';
 
 const preview = {
   parameters: {

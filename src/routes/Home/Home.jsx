@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { doExample } from '@store/actions/home';
-// import { nullSafe } from '@utils/globalMethods';
 import Header from '@components/Header';
 import Board from '@components/Board';
 import CodeOutput from '@components/CodeOutput';
@@ -10,54 +7,77 @@ import Footer from '@components/Footer';
 import './Home.scss';
 
 const Home = () => {
-  // const dispatch = useDispatch();
-  // const example = useSelector(state => nullSafe(() => state.home.example, null));
-
-  // function handleClick() {
-  //   // Code here..
-  //   const randomNumber = Math.floor(Math.random() * 100);
-  //   dispatch(doExample(randomNumber));
-  // }
-
-  // useEffect(() => {
-  //   // Code here..
-  //   console.log('home selector', example)
-  // }, [example]);
-
   const [blocks, setBlocks] = useState([]);
+  const [selectedBlockId, setSelectedBlockId] = useState(null);
+
+  // Impostazioni globali
   const [settings, setSettings] = useState({
     color: "#dddddd",
     showGrid: true,
     animation: false,
-    // altre impostazioni
+    snapToGrid: true,
+
+    boardBgColor: "#ffffff", // default sfondo
+    boardBgImage: "",        // default nessuna immagine
   });
 
-  // Funzione per aggiornare un blocco (es. se lo sposto)
+
+  // Modalità: 'select' o 'create'
+  const [mode, setMode] = useState('select');
+
+  // Caricamento iniziale da localStorage (opzionale)
+  useEffect(() => {
+    const savedBlocks = localStorage.getItem('blocks');
+    const savedSettings = localStorage.getItem('settings');
+    if (savedBlocks) setBlocks(JSON.parse(savedBlocks));
+    if (savedSettings) setSettings(JSON.parse(savedSettings));
+  }, []);
+
+  // Salvataggio su localStorage (opzionale)
+  useEffect(() => {
+    localStorage.setItem('blocks', JSON.stringify(blocks));
+  }, [blocks]);
+
+  useEffect(() => {
+    localStorage.setItem('settings', JSON.stringify(settings));
+  }, [settings]);
+
+  // Aggiorna un blocco esistente
   const updateBlock = (id, newProps) => {
-    setBlocks((prev) =>
-      prev.map((block) =>
+    setBlocks(prev =>
+      prev.map(block =>
         block.id === id ? { ...block, ...newProps } : block
       )
     );
   };
 
-  // Funzione per aggiungere un nuovo blocco
-  const addBlock = () => {
-    const newBlock = {
-      id: Date.now(),
-      x: 50,
-      y: 50,
-      width: 100,
-      height: 50,
-      color: settings.color,
-    };
-    setBlocks((prev) => [...prev, newBlock]);
+  // Aggiunge un nuovo blocco disegnato
+  const addBlock = (newBlock) => {
+    setBlocks(prev => [...prev, { ...newBlock, id: Date.now() }]);
   };
 
-  // Funzione per rimuovere un blocco
+  // Rimuove un blocco
   const removeBlock = (id) => {
-    setBlocks((prev) => prev.filter((block) => block.id !== id));
+    setBlocks(prev => prev.filter(b => b.id !== id));
+    // Se stai rimuovendo il blocco selezionato, togli la selezione
+    if (id === selectedBlockId) {
+      setSelectedBlockId(null);
+    }
   };
+
+  // Svuota completamente lo SVG
+  const clearSVG = () => {
+    setBlocks([]);
+    setSelectedBlockId(null);
+  };
+
+  // Quando Board segnala la selezione di un blocco
+  const handleSelectBlock = (id) => {
+    setSelectedBlockId(id);
+  };
+
+  // Ricaviamo il blocco selezionato, se esiste
+  const selectedBlock = blocks.find(b => b.id === selectedBlockId) || null;
 
   return (
     <>
@@ -65,26 +85,82 @@ const Home = () => {
         <div className='Header'>
           <Header />
         </div>
+
         <main id='main' className='main'>
           <div className='grid'>
             <div className='Board'>
               <Board
                 blocks={blocks}
                 onUpdateBlock={updateBlock}
+                onAddBlock={addBlock}
+                onRemoveBlock={removeBlock}
                 settings={settings}
+                mode={mode}
+                // Callback per quando selezioniamo un blocco
+                onSelectBlock={handleSelectBlock}
+                selectedBlockId={selectedBlockId}
               />
+
+              {/* Pulsanti Sovrapposti alla Board */}
+              <div className="mode-buttons">
+                {/* Selezione */}
+                <button
+                  className={`mode-button ${mode === 'select' ? 'active' : ''}`}
+                  onClick={() => setMode('select')}
+                >
+                  Select
+                </button>
+
+                {/* Creazione */}
+                <button
+                  className={`mode-button ${mode === 'create' ? 'active' : ''}`}
+                  onClick={() => setMode('create')}
+                >
+                  Create
+                </button>
+
+                {/* Mostra/Nascondi Griglia */}
+                <button
+                  className={`mode-button ${settings.showGrid ? 'active' : ''}`}
+                  onClick={() => setSettings(prev => ({ ...prev, showGrid: !prev.showGrid }))}
+                >
+                  {settings.showGrid ? 'Hide Grid' : 'Show Grid'}
+                </button>
+
+                {/* Snap On/Off */}
+                <button
+                  className={`mode-button ${settings.snapToGrid ? 'active' : ''}`}
+                  onClick={() => setSettings(prev => ({ ...prev, snapToGrid: !prev.snapToGrid }))}
+                >
+                  {settings.snapToGrid ? 'Snap ON' : 'Snap OFF'}
+                </button>
+
+                {/* Pulizia Completa */}
+                <button
+                  className="mode-button clear-button"
+                  onClick={clearSVG}
+                  disabled={blocks.length === 0}
+                >
+                  Clear SVG
+                </button>
+              </div>
             </div>
+
             <div className='CodeOutput'>
               <CodeOutput
                 blocks={blocks}
                 settings={settings}
               />
             </div>
+
+            {/* Settings: gestisce impostazioni globali e blocco selezionato */}
             <div className='Settings'>
               <Settings
                 settings={settings}
                 setSettings={setSettings}
-                onAddBlock={addBlock}
+                onRemoveBlock={removeBlock}
+                selectedBlock={selectedBlock}
+                onUpdateBlock={updateBlock}
               />
             </div>
           </div>
@@ -93,6 +169,6 @@ const Home = () => {
       <Footer />
     </>
   );
-}
+};
 
 export default Home;

@@ -8,3 +8,38 @@
  * @since 21-Jan-2025
 */
 
+/* Board.scss */
+/* Board.scss */
+
+.board__svg {
+  border: 1px solid #000;
+  // background: #f9f9f9;
+}
+
+/* Se vuoi un hover sulle maniglie */
+.resize-handle:hover {
+  fill: #ddd;
+}
+
+.selected {
+  stroke: blue;
+  stroke-width: 2;
+}
+
+.animated {
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    fill-opacity: 0.5;
+  }
+
+  50% {
+    fill-opacity: 1;
+  }
+
+  100% {
+    fill-opacity: 0.5;
+  }
+}
