@@ -8,3 +8,62 @@
  * @since 22-Jan-2025
 */
 
+
+.toggle__container {
+  display: flex;
+  flex-direction: column;
+  min-height: 4.375rem;
+  width: 100%;
+
+  input {
+    display: none;
+  }
+
+  .toggle__label {
+    font-size: .8rem;
+    margin-bottom: 1.44rem;
+    opacity: .7;
+    white-space: nowrap;
+  }
+
+  .toggle__background {
+    background-color: #888888;
+    border-radius: 2rem;
+    display: block;
+    height: 1.2rem;
+    transition: all .2s ease-in-out;
+    position: relative;
+    width: 2.5rem;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .toggle__pointer {
+    background-color: #fff;
+    border-radius: 1rem;
+    height: 1rem;
+    left: .1rem;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all .2s ease-in-out;
+    width: 1rem;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  input:checked {
+
+    &~.toggle__background {
+      background-color: #17D4A8;
+
+      .toggle__pointer {
+        left: 1.4rem;
+      }
+    }
+  }
+}

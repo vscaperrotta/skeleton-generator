@@ -8,3 +8,20 @@
  * @since 22-Jan-2025
 */
 
+.field__container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .field__label {
+    font-size: .8rem;
+    margin-bottom: 1.44rem;
+    opacity: .7;
+    white-space: nowrap;
+  }
+
+  .field__value {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+}

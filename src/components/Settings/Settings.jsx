@@ -3,18 +3,22 @@ import Input from '@components/Input';
 import Field from '@components/Field';
 import Toggle from '@components/Toggle';
 import UploadImage from '@components/UploadImage';
-
+import messages from './messages';
 import './Settings.scss';
 
-function Settings({
+const Settings = ({
   settings,
   setSettings,
   selectedBlock,
   onUpdateBlock
-}) {
+}) => {
   // Gestione globale colore di default per i nuovi blocchi
-  const handleColorChange = (e) => {
+  const handleColorChange1 = (e) => {
     setSettings(prev => ({ ...prev, color: e.target.value }));
+  };
+
+  const handleColorChange2 = (e) => {
+    setSettings(prev => ({ ...prev, color2: e.target.value }));
   };
 
   // Attiva/disattiva animazione globale
@@ -22,13 +26,15 @@ function Settings({
     setSettings(prev => ({ ...prev, animation: !prev.animation }));
   };
 
+  // Attiva/disattiva animazione globale
+  const handleChangeAnimationSpeed = (e) => {
+    setSettings(prev => ({ ...prev, animationSpeed: e.target.value }));
+  };
+
   // Cambia il colore di sfondo della Board
   const handleBoardBgColorChange = (e) => {
     setSettings(prev => ({ ...prev, boardBgColor: e.target.value }));
   };
-
-  // Stato locale per anteprima dell’immagine (se vuoi gestire base64 o URL)
-  const [previewImage, setPreviewImage] = useState(settings.boardBgImage || '');
 
   // Upload locale di un’immagine come base64
   const handleBgImageUpload = (e) => {
@@ -38,22 +44,15 @@ function Settings({
     const reader = new FileReader();
     reader.onload = (ev) => {
       const base64Str = ev.target.result;
-      setPreviewImage(base64Str);
       setSettings(prev => ({ ...prev, boardBgImage: base64Str }));
     };
     reader.readAsDataURL(file);
   };
 
-  // Inserimento di un URL remoto
-  const handleBgImageUrlChange = (e) => {
-    const url = e.target.value;
-    setPreviewImage(url);
-    setSettings(prev => ({ ...prev, boardBgImage: url }));
-  };
-
   // [NUOVO] Pulsante per rimuovere l’immagine di sfondo
   const handleRemoveImage = () => {
-    setPreviewImage('');
+    console.log('here')
+
     setSettings(prev => ({
       ...prev,
       boardBgImage: '',
@@ -71,90 +70,86 @@ function Settings({
 
   return (
     <div className="settings__container">
-      <h5>Global Settings</h5>
-
-      <label>
-        Default color:{' '}
-        <input
-          type="color"
-          value={settings.color}
-          onChange={handleColorChange}
-        />
-      </label>
-
-      <label>
-        Animation:{' '}
-        <input
-          type="checkbox"
-          checked={settings.animation}
-          onChange={handleAnimationToggle}
-        />
-      </label>
-
-      {/* Esempi di componenti personalizzati (a tuo piacere) */}
-      <Input />
-      <Field />
-      <Toggle />
-      <UploadImage />
+      <div className="settings__block">
+        <h6 className='settings__section-title'>
+          {messages.itemTitle}
+        </h6>
+        {/* Impostazioni del blocco selezionato (es. border radius) */}
+        {selectedBlock ? (
+          <div className="settings__block-grid">
+            <Field
+              label={messages.width}
+              value={`${selectedBlock.height}px`}
+            />
+            <Field
+              label={messages.height}
+              value={`${selectedBlock.width}px`}
+            />
+            <Input
+              label={messages.radius}
+              type="number"
+              value={selectedBlock.rx ?? 0}
+              onChange={handleRadiusChange}
+            />
+          </div>
+        ) : (
+          <p className="setting__single-item-placeholder">
+            {messages.itemMessage}
+          </p>
+        )}
+      </div>
+      <div className="settings__skeleton">
+        <h6 className='settings__section-title'>
+          {messages.skeletonTitle}
+        </h6>
+        <div className='settings__skeleton-grid'>
+          <Toggle
+            label={messages.animation}
+            checked={settings.animation}
+            onChange={handleAnimationToggle}
+          />
+          <Input
+            label={messages.color1}
+            type="color"
+            value={settings.color}
+            onChange={handleColorChange1}
+          />
+          <Input
+            label={messages.color2}
+            type="color"
+            value={settings.color2}
+            onChange={handleColorChange2}
+          />
+          <Input
+            label={messages.speed}
+            type="number"
+            value={settings.animationSpeed}
+            onChange={handleChangeAnimationSpeed}
+          />
+        </div>
+      </div>
 
       {/* Sezione sfondo Board */}
-      <div className="board-bg-settings">
-        <h5>Board Background</h5>
-
-        {/* Colore sfondo */}
-        <label>
-          Background color:{' '}
-          <input
+      <div className="settings__background">
+        <h6 className='settings__section-title'>
+          {messages.backgroundTitle}
+        </h6>
+        <div className='settings__background-grid'>
+          {/* Colore sfondo */}
+          <Input
+            label={messages.color}
             type="color"
             value={settings.boardBgColor}
             onChange={handleBoardBgColorChange}
           />
-        </label>
-
-        {/* Upload locale di un’immagine in base64 */}
-        <label>
-          Upload Image:
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleBgImageUpload}
+          <UploadImage
+            label={messages.image}
+            addImage={handleBgImageUpload}
+            removeImage={handleRemoveImage}
+            image={settings.boardBgImage}
           />
-        </label>
-
-        {/* Inserimento URL manuale */}
-        <label>
-          Image URL:
-          <input
-            type="text"
-            placeholder="https://example.com/img.png"
-            value={previewImage}
-            onChange={handleBgImageUrlChange}
-          />
-        </label>
-
-        {/* [NUOVO] Pulsante per rimuovere l'immagine di sfondo (solo se esiste) */}
-        {settings.boardBgImage && (
-          <button className="remove-bg-image" onClick={handleRemoveImage}>
-            RESET BACKGROUND
-          </button>
-        )}
-      </div>
-
-      {/* Impostazioni del blocco selezionato (es. border radius) */}
-      {selectedBlock && (
-        <div className="selected-block-settings">
-          <h5>Selected Block Options</h5>
-          <label>
-            Border Radius:{' '}
-            <input
-              type="number"
-              min={0}
-              value={selectedBlock.rx ?? 0}
-              onChange={handleRadiusChange}
-            />
-          </label>
         </div>
-      )}
+      </div>
     </div>
   );
 }

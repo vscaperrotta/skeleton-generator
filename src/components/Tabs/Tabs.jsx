@@ -9,27 +9,23 @@
 import React from 'react';
 import './Tabs.scss';
 
-const Tabs = () => {
+const Tabs = ({
+  active = '',
+  options = [],
+  onClick = () => { },
+  isMarkup = false
+}) => {
   return (
-    <div class="tab">
-      <button
-        class="tablinks"
-        onclick="openCity(event, 'London')"
-      >
-        Tab 1
-      </button>
-      <button
-        class="tablinks"
-        onclick="openCity(event, 'Paris')"
-      >
-        Tab 2
-      </button>
-      <button
-        class="tablinks"
-        onclick="openCity(event, 'Tokyo')"
-      >
-        Tab 3
-      </button>
+    <div className={`tabs__containers ${isMarkup ? 'tabs__containers--markup' : 'tabs__containers--languages'}`}>
+      {options.map((option, index) => (
+        <button
+          key={index}
+          className={active === option ? 'active' : ''}
+          onClick={() => onClick(option)}
+        >
+          {option.toLowerCase()}
+        </button>
+      ))}
     </div>
   )
 }

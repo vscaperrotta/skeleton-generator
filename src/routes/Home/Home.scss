@@ -9,92 +9,46 @@
 */
 
 .home__container {
+  align-items: center;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
   padding: 3.75rem;
   min-height: calc(100vh - 12.5rem);
+  width: 100%;
 
   .main {
-    border: 1px dashed coral;
+    max-width: 80rem;
     width: 100%;
   }
 
   .grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: auto auto;
     grid-template-rows: 1fr auto;
     grid-gap: 3.75rem;
     width: 100%;
 
-    @include respond(tab-land) {
+    @include respond(desktop) {
       grid-template-columns: 1fr;
       grid-template-rows: 1fr 1fr auto;
+      justify-items: center;
     }
   }
 }
 
-.Header {
-  border: 1px dashed limegreen;
-  width: 100%;
-}
-
 .Board {
-  border: 1px dashed lightseagreen;
+  max-width: 42.5rem;
+  position: relative;
   width: 100%;
 }
 
 .CodeOutput {
-  border: 1px dashed magenta;
+  max-width: 42.5rem;
   width: 100%;
 }
 
 .Settings {
-  border: 1px dashed yellow;
+  max-width: 42.5rem;
   width: 100%;
-}
-
-
-.Board {
-  position: relative;
-  /* Necessario per posizionare i pulsanti assoluti all'interno */
-  flex: 2;
-}
-
-.mode-buttons {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.mode-button {
-  padding: 8px 16px;
-  border: none;
-  background-color: #f0f0f0;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-}
-
-.mode-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.mode-button.active {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.clear-button {
-  background-color: #dc3545;
-  /* Rosso per l'azione distruttiva */
-  color: #fff;
-}
-
-.clear-button:hover:not(:disabled) {
-  background-color: #c82333;
 }

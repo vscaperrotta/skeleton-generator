@@ -9,11 +9,18 @@
 import React from 'react';
 import './Field.scss';
 
-const Field = () => {
+const Field = ({
+  label = '',
+  value = '',
+}) => {
   return (
-    <div>
-      <label htmlFor="">label</label>
-      <p>field</p>
+    <div className='field__container'>
+      <label className='field__label'>
+        {label}
+      </label>
+      <p className='field__value'>
+        {value}
+      </p>
     </div>
   )
 }

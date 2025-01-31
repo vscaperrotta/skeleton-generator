@@ -1,5 +1,5 @@
 :root {
-  --root-background-color: linear-gradient(to top right, #fff, #ccc);
+  --root-background-color: linear-gradient(to top right, #fff, #eee);
   --root-text-color: #333;
 
   // COMPONENTS
@@ -16,7 +16,6 @@
   --header_placeholder_squares-background-color: red;
 
   // Footer
-  --footer_container-background: linear-gradient(#fff, #ccc);
   --footer_paragraph-color: #888;
 
   // Board
@@ -29,6 +28,9 @@
     // Global
     --root-background-color: linear-gradient(to top right, #333, #111);
     --root-text-color: #fff;
+
+    --primary: #17D4A8;
+    --primary-dark: #0C6E57;
 
     // COMPONENTS
     // Button
@@ -44,11 +46,17 @@
     --header_placeholder_squares-background-color: lime;
 
     // Footer
-    --footer_container-background: linear-gradient(#333, #111);
     --footer_paragraph-color: #888;
 
     // Board
 
     // CodeOutput
+
+    // Input
+    --input-background: #404040;
+    --input-border-color: #888888;
+
+    // UplaodDocument
+    --upload-document_button-color: var(--primary);
   }
 }

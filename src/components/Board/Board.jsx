@@ -1,195 +1,200 @@
+/**
+ * Board.jsx
+ *
+ * - Creazione blocchi (modalità 'create')
+ * - Selezione e drag (modalità 'select')
+ * - Resize con 4 maniglie (se un blocco è selezionato)
+ * - Snap a griglia se settings.snapToGrid
+ * - Animazione shimmer se settings.animation
+ * - Griglia di sfondo se settings.showGrid
+ * - Confinamento all'interno di una board 500x500
+ */
+
 import React, { useState, useRef, useEffect } from 'react';
+import HandleResize from '@components/HandleResize';
+import {
+  snap,
+  clampPosition,
+  clampX,
+  clampY,
+  getBlockStyle
+} from './utils';
 import './Board.scss';
 
-function Board({
+
+
+// Costanti dimensione board (o potresti prenderle da offsetWidth/offsetHeight di boardRef)
+const BOARD_WIDTH = 676;
+const BOARD_HEIGHT = 676;
+
+const Board = ({
   blocks,
   onUpdateBlock,
   onAddBlock,
   onRemoveBlock,
   settings,
   mode,
-  onSelectBlock,     // Callback per segnalare il blocco selezionato
-  selectedBlockId,   // Id del blocco selezionato (gestito da Home)
-}) {
-  // Stati per il disegno di un nuovo blocco
+  onSelectBlock,
+  selectedBlockId
+}) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [newBlock, setNewBlock] = useState(null);
 
-  // Stati per il drag di un blocco selezionato
+  // Drag
   const [dragStart, setDragStart] = useState(null);
 
-  // Stati per il resize
+  // Resize
   const [isResizing, setIsResizing] = useState(false);
   const [resizeCorner, setResizeCorner] = useState(null);
 
-  const svgRef = useRef(null);
-  const gridSize = 20; // dimensione griglia per lo snap
+  const boardRef = useRef(null);
+  const gridSize = 20;
 
-  // Ascoltiamo il tasto Delete/Backspace per cancellare il blocco selezionato
+  // Gestione keyDown per cancellare blocco selezionato
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Se non c'è un blocco selezionato, usciamo
-      if (!selectedBlockId) return;
-
-      // Se la pressione non è Delete/Backspace, usciamo
-      if (e.key !== 'Delete' && e.key !== 'Backspace') return;
-
-      // [NUOVO] Se il focus è su un <input> o <textarea>, ignoriamo
-      const tag = e.target.tagName.toUpperCase();
-      if (tag === 'INPUT' || tag === 'TEXTAREA') {
-        // L’utente sta modificando un input,
-        // non vogliamo cancellare il blocco
-        return;
+      if (selectedBlockId && (e.key === 'Delete' || e.key === 'Backspace')) {
+        e.preventDefault();
+        onRemoveBlock(selectedBlockId);
       }
-
-      // A questo punto, safe to remove the block
-      e.preventDefault();
-      onRemoveBlock(selectedBlockId);
     };
-
     window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedBlockId, onRemoveBlock]);
 
-  const getSvgCoordinates = (event) => {
-    const svg = svgRef.current;
-    const point = svg.createSVGPoint();
-    point.x = event.clientX;
-    point.y = event.clientY;
-    const ctm = svg.getScreenCTM().inverse();
-    return point.matrixTransform(ctm);
-  };
-
-  // Funzione di snap, se snapToGrid è attivo
-  const snap = (value) => {
-    if (!settings.snapToGrid) return value;
-    return Math.round(value / gridSize) * gridSize;
+  // Converte coordinate mouse in coordinate board
+  const getBoardCoordinates = (e) => {
+    const rect = boardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    return { x, y };
   };
 
   const handleMouseDown = (e) => {
-    const target = e.target;
+    if (!boardRef.current) return;
+    const coords = getBoardCoordinates(e);
 
-    // Se ho cliccato su una maniglia di resize
-    if (target.classList.contains('resize-handle')) {
-      const corner = target.getAttribute('data-corner');
+    // Controllo se ho cliccato su una maniglia di resize
+    if (e.target.classList.contains('resize-handle')) {
+      const corner = e.target.getAttribute('data-corner'); // top-left, etc.
       setIsResizing(true);
       setResizeCorner(corner);
       return;
     }
 
     if (mode === 'select') {
-      if (target.tagName === 'rect' && target.getAttribute('data-id')) {
-        const id = parseInt(target.getAttribute('data-id'), 10);
-        // Segnaliamo la selezione al parent
+      // Verifica se ho cliccato su un blocco
+      const target = e.target;
+      if (target.dataset && target.dataset.id) {
+        const id = parseInt(target.dataset.id, 10);
         onSelectBlock?.(id);
 
         // Iniziamo eventuale drag
-        const coords = getSvgCoordinates(e);
+        const { x, y } = coords;
         setDragStart({
           id,
-          offsetX: coords.x - parseFloat(target.getAttribute('x')),
-          offsetY: coords.y - parseFloat(target.getAttribute('y')),
+          offsetX: x - parseFloat(target.style.left),
+          offsetY: y - parseFloat(target.style.top),
         });
       } else {
-        // clic fuori dai blocchi => deselezione
+        // clic fuori => deseleziono
         onSelectBlock?.(null);
       }
-    }
-    else if (mode === 'create') {
-      // Creo un nuovo blocco se clicco in un punto libero (non su un rettangolo)
-      if (target.tagName !== 'rect') {
-        const coords = getSvgCoordinates(e);
-        const snappedX = snap(coords.x);
-        const snappedY = snap(coords.y);
-
-        setIsDrawing(true);
-        setNewBlock({
-          x: snappedX,
-          y: snappedY,
-          width: 0,
-          height: 0,
-          color: settings.color,
-          rx: 0, // border radius di default
-        });
-
-        // Deseleziono eventuali blocchi
-        onSelectBlock?.(null);
-      }
+    } else if (mode === 'create') {
+      setIsDrawing(true);
+      setNewBlock({
+        x: clampX(BOARD_WIDTH, BOARD_HEIGHT, snap(coords.x, settings.snapToGrid, gridSize), 0, BOARD_WIDTH),
+        y: clampY(BOARD_WIDTH, BOARD_HEIGHT, snap(coords.y, settings.snapToGrid, gridSize), 0, BOARD_HEIGHT),
+        width: 0,
+        height: 0,
+        color: settings.color,
+        rx: 0,
+      });
     }
   };
 
   const handleMouseMove = (e) => {
-    const coords = getSvgCoordinates(e);
+    if (!boardRef.current) return;
+    const coords = getBoardCoordinates(e);
 
-    // Se sto ridimensionando un blocco esistente
     if (isResizing && selectedBlockId && resizeCorner) {
-      onResizeBlock(coords);
+      handleResizeBlock(coords);
       return;
     }
 
-    // Se sto disegnando un nuovo blocco
     if (mode === 'create' && isDrawing && newBlock) {
-      const snappedX = snap(coords.x);
-      const snappedY = snap(coords.y);
+      let snappedX = snap(coords.x, settings.snapToGrid, gridSize);
+      let snappedY = snap(coords.y, settings.snapToGrid, gridSize);
+
+      // Calcoliamo nuova width/height
+      const w = snappedX - newBlock.x;
+      const h = snappedY - newBlock.y;
+
       setNewBlock(prev => ({
         ...prev,
-        width: snappedX - prev.x,
-        height: snappedY - prev.y
+        width: w,
+        height: h
       }));
-    }
-    // Se sto trascinando un blocco selezionato
-    else if (mode === 'select' && selectedBlockId && dragStart) {
+    } else if (mode === 'select' && dragStart) {
       let newX = coords.x - dragStart.offsetX;
       let newY = coords.y - dragStart.offsetY;
+      newX = snap(newX, settings.snapToGrid, gridSize);
+      newY = snap(newY, settings.snapToGrid, gridSize);
 
-      if (settings.snapToGrid) {
-        newX = snap(newX);
-        newY = snap(newY);
-      }
-
-      onUpdateBlock(selectedBlockId, { x: newX, y: newY });
+      // Clamping: larghezza e altezza del blocco attuale
+      const block = blocks.find(b => b.id === dragStart.id);
+      if (!block) return;
+      const clamped = clampPosition(BOARD_WIDTH, BOARD_HEIGHT, newX, newY, block.width, block.height);
+      onUpdateBlock(dragStart.id, { x: clamped.x, y: clamped.y });
     }
   };
 
   const handleMouseUp = () => {
-    // Fine resize
     if (isResizing) {
       setIsResizing(false);
       setResizeCorner(null);
       return;
     }
 
-    // Fine disegno
     if (mode === 'create' && isDrawing && newBlock) {
-      const finalBlock = {
-        ...newBlock,
-        width: Math.abs(newBlock.width),
-        height: Math.abs(newBlock.height),
-        x: newBlock.width < 0 ? newBlock.x + newBlock.width : newBlock.x,
-        y: newBlock.height < 0 ? newBlock.y + newBlock.height : newBlock.y,
-      };
-      if (finalBlock.width > 5 && finalBlock.height > 5) {
+      // Fine disegno
+      let w = Math.abs(newBlock.width);
+      let h = Math.abs(newBlock.height);
+
+      // Start x/y
+      let finalX = newBlock.width < 0 ? newBlock.x + newBlock.width : newBlock.x;
+      let finalY = newBlock.height < 0 ? newBlock.y + newBlock.height : newBlock.y;
+
+      // Clamping
+      if (finalX < 0) finalX = 0;
+      if (finalY < 0) finalY = 0;
+      if (finalX + w > BOARD_WIDTH) w = BOARD_WIDTH - finalX;
+      if (finalY + h > BOARD_HEIGHT) h = BOARD_HEIGHT - finalY;
+
+      if (w > 5 && h > 5) {
+        const finalBlock = {
+          ...newBlock,
+          width: w,
+          height: h,
+          x: finalX,
+          y: finalY,
+        };
         onAddBlock(finalBlock);
       }
       setIsDrawing(false);
       setNewBlock(null);
     }
 
-    if (mode === 'select') {
-      setDragStart(null);
-    }
+    setDragStart(null);
   };
 
   // Funzione di resize
-  const onResizeBlock = (coords) => {
+  const handleResizeBlock = (coords) => {
     const block = blocks.find(b => b.id === selectedBlockId);
     if (!block) return;
 
-    let snappedX = snap(coords.x);
-    let snappedY = snap(coords.y);
+    let snappedX = snap(coords.x, settings.snapToGrid, gridSize);
+    let snappedY = snap(coords.y, settings.snapToGrid, gridSize);
 
     let { x, y, width, height } = block;
 
@@ -228,122 +233,42 @@ function Board({
         break;
     }
 
-    // Evita dimensioni troppo piccole
+    // Evita dimensioni negative
     if (width < 5) width = 5;
     if (height < 5) height = 5;
+
+    // Ora clampiamo x, y, width, height in modo che restino nella board
+    if (x < 0) {
+      width += x; // se x è -10, riduco la width di 10
+      x = 0;
+    }
+    if (y < 0) {
+      height += y;
+      y = 0;
+    }
+    if (x + width > BOARD_WIDTH) {
+      width = BOARD_WIDTH - x;
+    }
+    if (y + height > BOARD_HEIGHT) {
+      height = BOARD_HEIGHT - y;
+    }
 
     onUpdateBlock(selectedBlockId, { x, y, width, height });
   };
 
-  // Disegno griglia
-  const renderGrid = () => {
-    if (!settings.showGrid) return null;
-    const lines = [];
-    for (let i = 0; i <= 500; i += gridSize) {
-      lines.push(
-        <line
-          key={`v${i}`}
-          x1={i}
-          y1={0}
-          x2={i}
-          y2={500}
-          stroke="#ccc"
-          strokeWidth="0.5"
-        />
-      );
-      lines.push(
-        <line
-          key={`h${i}`}
-          x1={0}
-          y1={i}
-          x2={500}
-          y2={i}
-          stroke="#ccc"
-          strokeWidth="0.5"
-        />
-      );
-    }
-    return lines;
-  };
+  // Troviamo il blocco selezionato (se c'è)
+  const selectedBlock = blocks.find(b => b.id === selectedBlockId);
 
-  // Maniglie di resize per il blocco selezionato
-  const renderResizeHandles = (block) => {
-    const handles = [];
-    const size = 8; // dimensione del quadratino
-    const half = size / 2;
-
-    // Top-left
-    handles.push(
-      <rect
-        key="tl"
-        className="resize-handle"
-        data-corner="top-left"
-        x={block.x - half}
-        y={block.y - half}
-        width={size}
-        height={size}
-        fill="white"
-        stroke="black"
-        style={{ cursor: 'nwse-resize' }}
-      />
-    );
-
-    // Top-right
-    handles.push(
-      <rect
-        key="tr"
-        className="resize-handle"
-        data-corner="top-right"
-        x={block.x + block.width - half}
-        y={block.y - half}
-        width={size}
-        height={size}
-        fill="white"
-        stroke="black"
-        style={{ cursor: 'nesw-resize' }}
-      />
-    );
-    // Bottom-left
-    handles.push(
-      <rect
-        key="bl"
-        className="resize-handle"
-        data-corner="bottom-left"
-        x={block.x - half}
-        y={block.y + block.height - half}
-        width={size}
-        height={size}
-        fill="white"
-        stroke="black"
-        style={{ cursor: 'nesw-resize' }}
-      />
-    );
-
-    // Bottom-right
-    handles.push(
-      <rect
-        key="br"
-        className="resize-handle"
-        data-corner="bottom-right"
-        x={block.x + block.width - half}
-        y={block.y + block.height - half}
-        width={size}
-        height={size}
-        fill="white"
-        stroke="black"
-        style={{ cursor: 'nwse-resize' }}
-      />
-    );
-
-    return handles;
-  };
-
+  // Ritorno del componente
   return (
     <div
+      ref={boardRef}
+      className={`board__container ${settings.showGrid ? ' grid-active' : ''}`}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
       style={{
-        position: 'relative',
-        width: '500px',
-        height: '500px',
         backgroundColor: settings.boardBgColor,
         backgroundImage: settings.boardBgImage
           ? `url(${settings.boardBgImage})`
@@ -352,62 +277,45 @@ function Board({
         backgroundPosition: 'center',
       }}
     >
-      <svg
-        ref={svgRef}
-        width="500"
-        height="500"
-        className="board__svg"
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-      >
-        {renderGrid()}
-
-        {/* Blocchi esistenti */}
-        {blocks.map((block) => (
-          <rect
+      {/* Blocchi esistenti */}
+      {blocks.map((block) => {
+        const isSelected = (block.id === selectedBlockId);
+        const blockStyle = getBlockStyle(block, settings);
+        return (
+          <div
             key={block.id}
             data-id={block.id}
-            x={block.x}
-            y={block.y}
-            width={block.width}
-            height={block.height}
-            rx={block.rx ?? 0} // Gestione borderRadius
-            ry={block.rx ?? 0}
-            fill={block.color}
-            className={`
-              ${block.id === selectedBlockId ? 'selected' : ''}
-              ${settings.animation ? 'animated' : ''}
-            `}
+            className={`block ${isSelected ? 'selected' : ''} ${settings.animation ? 'shimmer' : ''}`}
+            style={blockStyle}
           />
-        ))}
+        );
+      })}
 
-        {/* Blocco in fase di disegno */}
-        {mode === 'create' && isDrawing && newBlock && (
-          <rect
-            x={newBlock.width < 0 ? newBlock.x + newBlock.width : newBlock.x}
-            y={newBlock.height < 0 ? newBlock.y + newBlock.height : newBlock.y}
-            width={Math.abs(newBlock.width)}
-            height={Math.abs(newBlock.height)}
-            rx={newBlock.rx ?? 0}
-            ry={newBlock.rx ?? 0}
-            fill={newBlock.color}
-            fillOpacity="0.5"
-            stroke="black"
-            strokeDasharray="4"
-          />
-        )}
+      {/* Blocco in disegno (modalità create) */}
+      {mode === 'create' && isDrawing && newBlock && (
+        <div
+          className="block shimmer"
+          style={{
+            position: 'absolute',
+            left: newBlock.width < 0 ? newBlock.x + newBlock.width : newBlock.x,
+            top: newBlock.height < 0 ? newBlock.y + newBlock.height : newBlock.y,
+            width: Math.abs(newBlock.width),
+            height: Math.abs(newBlock.height),
+            borderRadius: newBlock.rx,
+            background: (() => {
+              return `linear-gradient(to right, ${settings.color2} 8%, ${settings.color} 18%, ${settings.color2} 33%)`;
+            })(),
+            backgroundSize: '1000px 100%',
+          }}
+        />
+      )}
 
-        {/* Maniglie di resize se ho un blocco selezionato e non sto disegnando né ridimensionando */}
-        {selectedBlockId && !isDrawing && !isResizing && (() => {
-          const block = blocks.find(b => b.id === selectedBlockId);
-          if (!block) return null;
-          return renderResizeHandles(block);
-        })()}
-      </svg>
+      {selectedBlockId && !isDrawing && !dragStart && !isResizing ? (
+        <HandleResize block={selectedBlock} />
+      ) : null}
     </div>
   );
 }
+
 
 export default Board;

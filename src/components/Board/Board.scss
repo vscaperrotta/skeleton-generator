@@ -4,42 +4,51 @@
  *
  * @version 1.0.0
  *
- * @author Vittorio Scaperrotta
- * @since 21-Jan-2025
-*/
+ */
 
-/* Board.scss */
-/* Board.scss */
+.board__container {
+  border: .1rem solid #888;
+  border-radius: .5rem;
+  box-shadow: 0 .25rem .5rem rgba(0, 0, 0, .3);
+  position: relative;
+  min-height: 42.5rem;
+  position: relative;
+  width: 100%;
 
-.board__svg {
-  border: 1px solid #000;
-  // background: #f9f9f9;
+  /* Se la griglia è attiva, aggiungiamo un background repeating. */
+  &.grid-active {
+    background-color: #fff;
+    background-image:
+      linear-gradient(to right, #eee .05rem, transparent .05rem),
+      linear-gradient(to bottom, #eee .05rem, transparent .05rem) !important;
+    background-size: 20px 20px !important;
+    background-position: top left !important;
+  }
 }
 
-/* Se vuoi un hover sulle maniglie */
-.resize-handle:hover {
-  fill: #ddd;
+
+/* Blocchi */
+.block {
+  box-sizing: border-box;
+  cursor: pointer;
 }
 
+/* Se un blocco è selezionato */
 .selected {
-  stroke: blue;
-  stroke-width: 2;
+  outline: .125rem solid #F12093;
 }
 
-.animated {
-  animation: shimmer 2s infinite;
+/* Animazione "shimmer" base (usiamo background-position animato) */
+.shimmer {
+  animation: shimmer 1.5s infinite linear;
 }
 
 @keyframes shimmer {
   0% {
-    fill-opacity: 0.5;
-  }
-
-  50% {
-    fill-opacity: 1;
+    background-position: -500px 0;
   }
 
   100% {
-    fill-opacity: 0.5;
+    background-position: 500px 0;
   }
 }

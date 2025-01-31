@@ -2,7 +2,7 @@
   "name": "skeleton-generator",
   "displayName": "Skeleton Generator",
   "private": true,
-  "version": "1.1.5",
+  "version": "0.1.0",
   "description": "Tool to generate skeleton for different JS frameworks",
   "main": "index.jsx",
   "author": "Vittorio Scaperrotta",

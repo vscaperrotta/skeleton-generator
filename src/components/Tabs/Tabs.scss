@@ -9,34 +9,67 @@
 */
 
 /* Style the tab */
-.tab {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
+.tabs__containers {
+  background-color: #444444;
+  display: flex;
+  width: 100%;
 
-  & button {
-    background-color: inherit;
-    float: left;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
-    font-size: 17px;
+  &--markup {
+    overflow: hidden;
+    padding: 0;
+
+    button {
+      background-color: transparent;
+      padding: .8rem 1.5rem;
+      border: 0;
+      color: #ccc;
+      cursor: pointer;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.3s;
+
+      &:hover {
+        color: #fff;
+      }
+
+      &.active {
+        background-color: #ff38ac;
+        color: #fff;
+        font-weight: 700;
+      }
+    }
   }
 
-  & button:hover {
-    background-color: #ddd;
-  }
+  &--languages {
+    gap: 2rem;
+    overflow: hidden;
+    padding: 1rem 2rem;
 
-  & button.active {
-    background-color: #ccc;
+    button {
+      background-color: transparent;
+      border: 0;
+      color: #ccc;
+      cursor: pointer;
+      font-size: 1rem;
+      outline: none;
+      padding: 0;
+      transition: 0.3s;
+
+      &:hover {
+        color: #fff;
+      }
+
+      &.active {
+        color: #17D4A8;
+        font-weight: 700;
+      }
+    }
   }
 
   .tabcontent {
     display: none;
     padding: 6px 12px;
-    border: 1px solid #ccc;
+    border: .1rem solid #ccc;
     border-top: none;
   }
 }

@@ -1,56 +1,54 @@
-/**
- *
- * CodeOutput
- *
- * @author Vittorio Scaperrotta
- * @date 21-Jan-2025
-*/
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Tabs from '@components/Tabs';
+import getCodeParts from './utils';
 import './CodeOutput.scss';
 
 
-function CodeOutput({ blocks = [] }) {
-  // Esempio di generatore di codice SVG
-  // Potresti aggiungere logiche per React, Vue, Angular, ecc.
+const CodeOutput = ({
+  blocks = [],
+  settings = {}
+}) => {
+  const [mainFormat, setMainFormat] = useState('HTML');
+  const [subTab, setSubTab] = useState('MARKUP');
 
-  const generateSVGCode = () => {
-    const svgWidth = 500;
-    const svgHeight = 500;
-
-    // Generiamo le linee di codice <rect> per ciascun block
-    const rects = blocks
-      .map((block) => `
-        <rect
-          x="${block.x}"
-          y="${block.y}"
-          width="${block.width}"
-          height="${block.height}"
-          fill="${block.color}"
-        />
-      `)
-      .join("\n");
-
-    return `
-      <svg width="${svgWidth}" height="${svgHeight}" xmlns="http://www.w3.org/2000/svg">
-        ${rects}
-      </svg>
-    `;
-  };
+  const { markup, css } = getCodeParts(mainFormat, blocks, settings);
+  const showSubTabs = (mainFormat !== 'SVG');
+  const codeToShow = showSubTabs
+    ? (subTab === 'MARKUP' ? markup : css)
+    : markup;
 
   return (
-    <div className="CodeOutput">
-      <textarea
-        readOnly
-        value={generateSVGCode()}
-        rows={10}
-        style={{ width: "100%" }}
+    <div className="code-output__container">
+      {/* Sub-tab: Markup / CSS (solo se non è svg) */}
+
+      {/* Tab to select format output */}
+      {showSubTabs && (
+        <Tabs
+          isMarkup
+          active={subTab}
+          options={['MARKUP', 'CSS']}
+          onClick={setSubTab}
+        />
+      )}
+
+      <div className="code-editor-container">
+        <textarea
+          readOnly
+          className="code-editor"
+          // rows={20}
+          style={{ width: '100%' }}
+          value={codeToShow}
+        />
+      </div>
+
+      {/* Tab to select format output */}
+      <Tabs
+        active={mainFormat}
+        options={['HTML', 'REACT', 'ANGULAR', 'VUE', 'QWIK', 'SVELTE', 'SVG']}
+        onClick={setMainFormat}
       />
-      <Tabs />
-    </div>
+    </div >
   );
 }
-
 
 export default CodeOutput;

@@ -4,6 +4,7 @@ import Board from '@components/Board';
 import CodeOutput from '@components/CodeOutput';
 import Settings from '@components/Settings';
 import Footer from '@components/Footer';
+import Controller from '@components/Controller';
 import './Home.scss';
 
 const Home = () => {
@@ -12,15 +13,15 @@ const Home = () => {
 
   // Impostazioni globali
   const [settings, setSettings] = useState({
-    color: "#dddddd",
+    color: "#17d4a8",
+    color2: "#ff38ac",
     showGrid: true,
     animation: false,
+    animationSpeed: 2,
     snapToGrid: true,
-
-    boardBgColor: "#ffffff", // default sfondo
-    boardBgImage: "",        // default nessuna immagine
+    boardBgColor: "#ffffff",
+    boardBgImage: "",
   });
-
 
   // Modalità: 'select' o 'create'
   const [mode, setMode] = useState('select');
@@ -82,13 +83,15 @@ const Home = () => {
   return (
     <>
       <div className="home__container">
-        <div className='Header'>
-          <Header />
-        </div>
+        {/* Header */}
+        <Header />
 
+        {/* Main content */}
         <main id='main' className='main'>
           <div className='grid'>
             <div className='Board'>
+
+              {/* Board: is the canvas */}
               <Board
                 blocks={blocks}
                 onUpdateBlock={updateBlock}
@@ -96,56 +99,23 @@ const Home = () => {
                 onRemoveBlock={removeBlock}
                 settings={settings}
                 mode={mode}
-                // Callback per quando selezioniamo un blocco
+                // Callback when select a shape
                 onSelectBlock={handleSelectBlock}
                 selectedBlockId={selectedBlockId}
               />
 
-              {/* Pulsanti Sovrapposti alla Board */}
-              <div className="mode-buttons">
-                {/* Selezione */}
-                <button
-                  className={`mode-button ${mode === 'select' ? 'active' : ''}`}
-                  onClick={() => setMode('select')}
-                >
-                  Select
-                </button>
-
-                {/* Creazione */}
-                <button
-                  className={`mode-button ${mode === 'create' ? 'active' : ''}`}
-                  onClick={() => setMode('create')}
-                >
-                  Create
-                </button>
-
-                {/* Mostra/Nascondi Griglia */}
-                <button
-                  className={`mode-button ${settings.showGrid ? 'active' : ''}`}
-                  onClick={() => setSettings(prev => ({ ...prev, showGrid: !prev.showGrid }))}
-                >
-                  {settings.showGrid ? 'Hide Grid' : 'Show Grid'}
-                </button>
-
-                {/* Snap On/Off */}
-                <button
-                  className={`mode-button ${settings.snapToGrid ? 'active' : ''}`}
-                  onClick={() => setSettings(prev => ({ ...prev, snapToGrid: !prev.snapToGrid }))}
-                >
-                  {settings.snapToGrid ? 'Snap ON' : 'Snap OFF'}
-                </button>
-
-                {/* Pulizia Completa */}
-                <button
-                  className="mode-button clear-button"
-                  onClick={clearSVG}
-                  disabled={blocks.length === 0}
-                >
-                  Clear SVG
-                </button>
-              </div>
+              {/* Controller: manage board pointer and shape generation */}
+              <Controller
+                mode={mode}
+                settings={settings}
+                blocks={blocks}
+                setMode={setMode}
+                setSettings={setSettings}
+                clearSVG={clearSVG}
+              />
             </div>
 
+            {/* Code output: manage output in different code languages */}
             <div className='CodeOutput'>
               <CodeOutput
                 blocks={blocks}
@@ -153,7 +123,7 @@ const Home = () => {
               />
             </div>
 
-            {/* Settings: gestisce impostazioni globali e blocco selezionato */}
+            {/* Settings: manage settings */}
             <div className='Settings'>
               <Settings
                 settings={settings}
@@ -166,6 +136,8 @@ const Home = () => {
           </div>
         </main>
       </div>
+
+      {/* Footer */}
       <Footer />
     </>
   );

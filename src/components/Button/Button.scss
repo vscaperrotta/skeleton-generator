@@ -28,7 +28,7 @@
     padding: .8rem;
 
     &:hover {
-      background: linear-gradient(to top right, #0C6E57, #17D4A8);
+      background: linear-gradient(to top right, var(--primary-dark), var(--primary));
       color: var(--button_outlined-hover-color);
     }
   }
