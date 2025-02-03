@@ -1,3 +1,11 @@
+/**
+ *
+ * CodeOutput
+ *
+ * @author Vittorio Scaperrotta
+ * @date 22-Jan-2025
+*/
+
 import React, { useState } from 'react';
 import Tabs from '@components/Tabs';
 import getCodeParts from './utils';
@@ -12,17 +20,30 @@ const CodeOutput = ({
   const [subTab, setSubTab] = useState('MARKUP');
 
   const { markup, css } = getCodeParts(mainFormat, blocks, settings);
-  const showSubTabs = (mainFormat !== 'SVG');
-  const codeToShow = showSubTabs
-    ? (subTab === 'MARKUP' ? markup : css)
-    : markup;
+  const showMarkupTabs = (mainFormat !== 'SVG');
+
+  /**
+   * Handle showing the appropriate code based on the selected tab.
+   *
+   * @returns {string} The code to display.
+   */
+  function handleShowCode() {
+    if (showMarkupTabs) {
+      if (subTab === 'MARKUP') {
+        return markup;
+      } else {
+        return css;
+      }
+    } else {
+      return markup;
+    }
+  }
 
   return (
     <div className="code-output__container">
-      {/* Sub-tab: Markup / CSS (solo se non è svg) */}
 
       {/* Tab to select format output */}
-      {showSubTabs && (
+      {showMarkupTabs && (
         <Tabs
           isMarkup
           active={subTab}
@@ -31,13 +52,12 @@ const CodeOutput = ({
         />
       )}
 
-      <div className="code-editor-container">
+      {/* Editor */}
+      <div className="code-output__editor-container">
         <textarea
           readOnly
-          className="code-editor"
-          // rows={20}
-          style={{ width: '100%' }}
-          value={codeToShow}
+          className="code-output__editor-textarea"
+          value={handleShowCode()}
         />
       </div>
 

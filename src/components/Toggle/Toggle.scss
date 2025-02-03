@@ -20,6 +20,7 @@
   }
 
   .toggle__label {
+    color: var(--input-label-color);
     font-size: .8rem;
     margin-bottom: 1.44rem;
     opacity: .7;
@@ -59,7 +60,7 @@
   input:checked {
 
     &~.toggle__background {
-      background-color: #17D4A8;
+      background-color: var(--toggle-background-color);
 
       .toggle__pointer {
         left: 1.4rem;

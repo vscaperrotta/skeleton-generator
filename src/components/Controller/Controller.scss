@@ -24,9 +24,9 @@
   transform: translateX(-50%);
 
   .divider {
-    background-color: #fff;
-    height: 2rem;
-    opacity: .5;
+    background-color: var(--controller-divider);
+    height: 1.5rem;
+    opacity: .3;
     width: .1rem;
   }
 
@@ -41,27 +41,49 @@
     height: 2rem;
     outline: none;
     padding: .25rem;
+    position: relative;
     transition: all .2s ease-in-out;
     width: 2rem;
 
-    &:hover {
-      background-color: rgba(255, 255, 255, .2);
+    svg {
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
     }
 
-    &.clear {
+    path {
+      fill: var(--controller-icon-color);
+    }
 
-      &:hover,
-      &:focus {
-        background: linear-gradient(to top right, #6E0C0C, #D41717);
+    &:hover {
+      background-color: var(--controller-icon-hover-background);
+    }
+
+    &.active {
+
+      path {
+        fill: var(--controller-icon-active-color);
       }
 
-      &:active {
-        background: linear-gradient(to top right, #6E0C0C, #D41717);
+      &:hover {
         filter: brightness(1.2);
       }
     }
 
     &.editing {
+
+      svg {
+        left: 46%;
+        top: 46%;
+      }
+
+      &.active {
+        background: linear-gradient(to top right, #0C6E57, #17D4A8);
+      }
+    }
+
+    &.create {
       &.active {
         background: linear-gradient(to top right, #0C6E57, #17D4A8);
       }
@@ -73,48 +95,21 @@
       }
     }
 
-    &.active {
-      &:hover {
+    &.clear {
+
+      &:hover,
+      &:focus {
+        background: linear-gradient(to top right, #6E0C0C, #D41717);
+
+        path {
+          fill: #fff;
+        }
+      }
+
+      &:active {
+        background: linear-gradient(to top right, #6E0C0C, #D41717);
         filter: brightness(1.2);
       }
     }
   }
-}
-
-.mode-buttons {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.mode-button {
-  padding: 8px 16px;
-  border: none;
-  background-color: #f0f0f0;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-}
-
-.mode-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.mode-button.active {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.clear-button {
-  background-color: #dc3545;
-  /* Rosso per l'azione distruttiva */
-  color: #fff;
-}
-
-.clear-button:hover:not(:disabled) {
-  background-color: #c82333;
 }

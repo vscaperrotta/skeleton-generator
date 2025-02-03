@@ -1,14 +1,10 @@
 /**
- * Board.jsx
  *
- * - Creazione blocchi (modalità 'create')
- * - Selezione e drag (modalità 'select')
- * - Resize con 4 maniglie (se un blocco è selezionato)
- * - Snap a griglia se settings.snapToGrid
- * - Animazione shimmer se settings.animation
- * - Griglia di sfondo se settings.showGrid
- * - Confinamento all'interno di una board 500x500
- */
+ * Board
+ *
+ * @author Vittorio Scaperrotta
+ * @date 22-Jan-2025
+*/
 
 import React, { useState, useRef, useEffect } from 'react';
 import HandleResize from '@components/HandleResize';
@@ -20,7 +16,6 @@ import {
   getBlockStyle
 } from './utils';
 import './Board.scss';
-
 
 
 // Costanti dimensione board (o potresti prenderle da offsetWidth/offsetHeight di boardRef)
@@ -97,8 +92,7 @@ const Board = ({
           offsetY: y - parseFloat(target.style.top),
         });
       } else {
-        // clic fuori => deseleziono
-        onSelectBlock?.(null);
+        onSelectBlock(null);
       }
     } else if (mode === 'create') {
       setIsDrawing(true);
@@ -256,10 +250,8 @@ const Board = ({
     onUpdateBlock(selectedBlockId, { x, y, width, height });
   };
 
-  // Troviamo il blocco selezionato (se c'è)
   const selectedBlock = blocks.find(b => b.id === selectedBlockId);
 
-  // Ritorno del componente
   return (
     <div
       ref={boardRef}
@@ -277,6 +269,12 @@ const Board = ({
         backgroundPosition: 'center',
       }}
     >
+      <div className={`
+        board__grid
+        ${settings.showGrid ? 'active' : ''}
+        ${settings.boardBgImage ? 'board__grid--white-image' : ''}
+      `} />
+
       {/* Blocchi esistenti */}
       {blocks.map((block) => {
         const isSelected = (block.id === selectedBlockId);
@@ -285,7 +283,7 @@ const Board = ({
           <div
             key={block.id}
             data-id={block.id}
-            className={`block ${isSelected ? 'selected' : ''} ${settings.animation ? 'shimmer' : ''}`}
+            className={`board__block ${isSelected ? 'selected' : ''} ${settings.animation ? 'shimmer' : ''}`}
             style={blockStyle}
           />
         );
@@ -294,23 +292,19 @@ const Board = ({
       {/* Blocco in disegno (modalità create) */}
       {mode === 'create' && isDrawing && newBlock && (
         <div
-          className="block shimmer"
+          className="board__block shimmer"
           style={{
-            position: 'absolute',
+            borderRadius: newBlock.rx,
+            height: Math.abs(newBlock.height),
             left: newBlock.width < 0 ? newBlock.x + newBlock.width : newBlock.x,
             top: newBlock.height < 0 ? newBlock.y + newBlock.height : newBlock.y,
             width: Math.abs(newBlock.width),
-            height: Math.abs(newBlock.height),
-            borderRadius: newBlock.rx,
-            background: (() => {
-              return `linear-gradient(to right, ${settings.color2} 8%, ${settings.color} 18%, ${settings.color2} 33%)`;
-            })(),
-            backgroundSize: '1000px 100%',
+            background: `linear-gradient(to right, ${settings.color2} 8%, ${settings.color} 18%, ${settings.color2} 33%)`,
           }}
         />
       )}
 
-      {selectedBlockId && !isDrawing && !dragStart && !isResizing ? (
+      {selectedBlockId && !isDrawing && !dragStart ? (
         <HandleResize block={selectedBlock} />
       ) : null}
     </div>

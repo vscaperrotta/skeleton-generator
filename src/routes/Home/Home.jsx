@@ -1,17 +1,27 @@
-import React, { useState, useEffect } from 'react';
+/**
+ *
+ * Home
+ *
+ * @author Vittorio Scaperrotta
+ * @date 22-Jan-2025
+*/
+
+import React, { useState } from 'react';
 import Header from '@components/Header';
 import Board from '@components/Board';
 import CodeOutput from '@components/CodeOutput';
 import Settings from '@components/Settings';
 import Footer from '@components/Footer';
 import Controller from '@components/Controller';
+import Grid from '@assets/Grid';
 import './Home.scss';
 
 const Home = () => {
   const [blocks, setBlocks] = useState([]);
   const [selectedBlockId, setSelectedBlockId] = useState(null);
+  const [mode, setMode] = useState('select');
 
-  // Impostazioni globali
+  // Settings State
   const [settings, setSettings] = useState({
     color: "#17d4a8",
     color2: "#ff38ac",
@@ -23,27 +33,15 @@ const Home = () => {
     boardBgImage: "",
   });
 
-  // Modalità: 'select' o 'create'
-  const [mode, setMode] = useState('select');
+  // Get the selected block, if any
+  const selectedBlock = blocks.find(b => b.id === selectedBlockId) || null;
 
-  // Caricamento iniziale da localStorage (opzionale)
-  useEffect(() => {
-    const savedBlocks = localStorage.getItem('blocks');
-    const savedSettings = localStorage.getItem('settings');
-    if (savedBlocks) setBlocks(JSON.parse(savedBlocks));
-    if (savedSettings) setSettings(JSON.parse(savedSettings));
-  }, []);
-
-  // Salvataggio su localStorage (opzionale)
-  useEffect(() => {
-    localStorage.setItem('blocks', JSON.stringify(blocks));
-  }, [blocks]);
-
-  useEffect(() => {
-    localStorage.setItem('settings', JSON.stringify(settings));
-  }, [settings]);
-
-  // Aggiorna un blocco esistente
+  /**
+   * Update the properties of a block.
+   *
+   * @param {number} id - The ID of the block to update.
+   * @param {Object} newProps - The new properties to apply to the block.
+   */
   const updateBlock = (id, newProps) => {
     setBlocks(prev =>
       prev.map(block =>
@@ -52,46 +50,57 @@ const Home = () => {
     );
   };
 
-  // Aggiunge un nuovo blocco disegnato
+  /**
+   * Add a new block.
+   *
+   * @param {Object} newBlock - The new block to add.
+   */
   const addBlock = (newBlock) => {
     setBlocks(prev => [...prev, { ...newBlock, id: Date.now() }]);
   };
 
-  // Rimuove un blocco
+  /**
+   * Remove a block by its ID.
+   *
+   * @param {number} id - The ID of the block to remove.
+   */
   const removeBlock = (id) => {
     setBlocks(prev => prev.filter(b => b.id !== id));
-    // Se stai rimuovendo il blocco selezionato, togli la selezione
     if (id === selectedBlockId) {
       setSelectedBlockId(null);
     }
   };
 
-  // Svuota completamente lo SVG
+  /**
+   * Clear all blocks from the SVG.
+   */
   const clearSVG = () => {
     setBlocks([]);
     setSelectedBlockId(null);
   };
 
-  // Quando Board segnala la selezione di un blocco
+  /**
+   * Handle the selection of a block.
+   *
+   * @param {number} id - The ID of the selected block.
+   */
   const handleSelectBlock = (id) => {
     setSelectedBlockId(id);
   };
 
-  // Ricaviamo il blocco selezionato, se esiste
-  const selectedBlock = blocks.find(b => b.id === selectedBlockId) || null;
-
   return (
     <>
       <div className="home__container">
-        {/* Header */}
+
+        <div className="home__grid-container">
+          <Grid />
+        </div>
+
         <Header />
 
-        {/* Main content */}
         <main id='main' className='main'>
           <div className='grid'>
             <div className='Board'>
-
-              {/* Board: is the canvas */}
               <Board
                 blocks={blocks}
                 onUpdateBlock={updateBlock}
@@ -99,12 +108,9 @@ const Home = () => {
                 onRemoveBlock={removeBlock}
                 settings={settings}
                 mode={mode}
-                // Callback when select a shape
                 onSelectBlock={handleSelectBlock}
                 selectedBlockId={selectedBlockId}
               />
-
-              {/* Controller: manage board pointer and shape generation */}
               <Controller
                 mode={mode}
                 settings={settings}
@@ -114,16 +120,12 @@ const Home = () => {
                 clearSVG={clearSVG}
               />
             </div>
-
-            {/* Code output: manage output in different code languages */}
             <div className='CodeOutput'>
               <CodeOutput
                 blocks={blocks}
                 settings={settings}
               />
             </div>
-
-            {/* Settings: manage settings */}
             <div className='Settings'>
               <Settings
                 settings={settings}
@@ -136,8 +138,6 @@ const Home = () => {
           </div>
         </main>
       </div>
-
-      {/* Footer */}
       <Footer />
     </>
   );

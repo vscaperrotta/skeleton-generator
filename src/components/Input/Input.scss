@@ -17,6 +17,7 @@
   width: 100%;
 
   .input__label {
+    color: var(--input-label-color);
     font-size: .8rem;
     margin-bottom: 1.44rem;
     opacity: .7;
@@ -37,7 +38,7 @@
     input {
       background-color: transparent;
       border: 0;
-      color: #fff;
+      color: var(--input-value-color);
       font-size: .8rem;
       outline: 0;
       text-transform: uppercase;

@@ -7,11 +7,11 @@
 */
 
 import React from 'react';
-import Bin from '@assets/bin.svg';
-import Grid from '@assets/grid.svg';
-import Lock from '@assets/lock.svg';
-import Pointer from '@assets/pointer.svg';
-import Shape from '@assets/shape.svg';
+import Bin from '@assets/icons/Bin';
+import Grid from '@assets/icons/Grid';
+import Lock from '@assets/icons/Lock';
+import Pointer from '@assets/icons/Pointer';
+import Shape from '@assets/icons/Shape';
 import './Controller.scss';
 
 const Controller = ({
@@ -29,15 +29,15 @@ const Controller = ({
         className={`controller__button editing ${mode === 'select' ? 'active' : ''}`}
         onClick={() => setMode('select')}
       >
-        <img src={Pointer} alt="Selection" />
+        <Pointer />
       </button>
 
       {/* Draw shape */}
       <button
-        className={`controller__button editing ${mode === 'create' ? 'active' : ''}`}
+        className={`controller__button create ${mode === 'create' ? 'active' : ''}`}
         onClick={() => setMode('create')}
       >
-        <img src={Shape} alt="Draw Shape" />
+        <Shape />
       </button>
 
       <div className='divider' />
@@ -47,7 +47,7 @@ const Controller = ({
         className={`controller__button functionality ${settings.showGrid ? 'active' : ''}`}
         onClick={() => setSettings(prev => ({ ...prev, showGrid: !prev.showGrid }))}
       >
-        <img src={Grid} alt="Show Grid" />
+        <Grid />
       </button>
 
       {/* Lock to grid */}
@@ -55,8 +55,10 @@ const Controller = ({
         className={`controller__button functionality ${settings.snapToGrid ? 'active' : ''}`}
         onClick={() => setSettings(prev => ({ ...prev, snapToGrid: !prev.snapToGrid }))}
       >
-        <img src={Lock} alt="" />
+        <Lock />
       </button>
+
+      <div className='divider' />
 
       {/* Clean all board */}
       <button
@@ -64,7 +66,7 @@ const Controller = ({
         onClick={clearSVG}
         disabled={blocks.length === 0}
       >
-        <img src={Bin} alt="Clean Canvas" />
+        <Bin />
       </button>
     </div>
   )

@@ -9,6 +9,8 @@
 import React from 'react';
 import messages from './messages';
 import Button from '@components/Button';
+import Shape1 from '@assets/header/Shape1';
+import Shape2 from '@assets/header/Shape2';
 import './Header.scss';
 
 const Header = () => {
@@ -19,14 +21,11 @@ const Header = () => {
 
   return (
     <header className='header__container'>
-      <div className='header__placeholder header__placeholder--strips'>
-        <div />
-        <div />
-        <div />
+      <div className='header__shapes header__shapes--shape1'>
+        <Shape1 />
       </div>
-      <div className='header__placeholder header__placeholder--squares'>
-        <div />
-        <div />
+      <div className='header__shapes header__shapes--shape2'>
+        <Shape2 />
       </div>
       <h3 className='header__title'>{messages.title}</h3>
       <p className='header__paragraph'>{messages.paragraph}</p>

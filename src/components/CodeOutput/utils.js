@@ -1,84 +1,78 @@
-/**
- * Funzione per schiarire un colore (usata anche nell'export).
- */
-function lightenColor(hex, amount) {
-  let color = hex.replace(/^#/, '');
-  if (color.length === 3) {
-    color = color.split('').map(c => c + c).join('');
+
+const generateCss = `
+    .skeleton-container {
+      position: relative;
+      width: 500px;
+      height: 500px;
+      background: #f0f0f0;
+    }
+    .skeleton-block {
+      position: absolute;
+    }
+  `;
+
+const generateAnimation = `
+  @keyframes shimmer {
+    0%   { background-position: -500px 0; }
+    100% { background-position: 500px 0; }
   }
-  const num = parseInt(color, 16);
-  let r = (num >> 16) & 0xff;
-  let g = (num >> 8) & 0xff;
-  let b = num & 0xff;
+  .shimmer {
+    animation: shimmer 1.5s infinite linear;
+  }
+`
 
-  r = Math.min(255, Math.round(r + (255 - r) * amount));
-  g = Math.min(255, Math.round(g + (255 - g) * amount));
-  b = Math.min(255, Math.round(b + (255 - b) * amount));
-
-  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1).toUpperCase()}`;
-}
-
-
+/**
+ * Generates HTML and CSS code for the skeleton blocks.
+ *
+ * @param {Array} blocks - The blocks to generate code from.
+ * @param {Object} settings - The settings for code generation.
+ * @returns {Object} An object containing the markup and CSS.
+ */
 function generateHTMLCSS(blocks, settings) {
   const markup = `
 <div class="skeleton-container">
-  ${blocks.map(block => {
-    // Se animation attivo, usiamo classe "shimmer" + gradient inline
-    const sideColor = lightenColor(block.color, 0.2);
-    const gradient = `linear-gradient(to right, ${sideColor} 8%, ${block.color} 18%, ${sideColor} 33%)`;
+    ${blocks.map(block => {
+    const gradient = `linear-gradient(to right, ${settings.color2} 8%, ${block.color} 18%, ${settings.color2} 33%)`;
     const shimmerClass = settings.animation ? 'shimmer' : '';
 
     return `
-  <div
-    class="skeleton-block ${shimmerClass}"
-    style="
-      left: ${block.x}px;
-      top: ${block.y}px;
-      width: ${block.width}px;
-      height: ${block.height}px;
-      border-radius: ${block.rx ?? 0}px;
-      ${settings.animation
+    <div
+      class="skeleton-block ${shimmerClass}"
+      style="
+        left: ${block.x}px;
+        top: ${block.y}px;
+        width: ${block.width}px;
+        height: ${block.height}px;
+        border-radius: ${block.rx ?? 0}px;
+        ${settings.animation
         ? 'background: ' + gradient + '; background-size: 1000px 100%;'
         : 'background-color: ' + block.color + ';'
       }
-    "
-  ></div>`;
-  }).join('\n')}
-</div>
-`;
+      "
+    ></div>`;
+  })
+      .join('\n')}
+</div>`;
 
-  let css = `
-.skeleton-container {
-  position: relative;
-  width: 500px;
-  height: 500px;
-  background: #f0f0f0;
-}
-.skeleton-block {
-  position: absolute;
-}
-`;
+  let css = generateCss;
 
   if (settings.animation) {
-    css += `
-@keyframes shimmer {
-  0%   { background-position: -500px 0; }
-  100% { background-position: 500px 0; }
-}
-.shimmer {
-  animation: shimmer 1.5s infinite linear;
-}
-`;
+    css += generateAnimation;
   }
 
   return { markup, css };
 }
 
+/**
+ * Generates React code for the skeleton blocks.
+ *
+ * @param {Array} blocks - The blocks to generate code from.
+ * @param {Object} settings - The settings for code generation.
+ * @returns {Object} An object containing the markup and CSS.
+ */
 function generateReact(blocks, settings) {
-  // Creiamo il "markup" = file React
   const blockDivs = blocks.map(block => {
-    const sideColor = lightenColor(block.color, 0.2);
-    const gradient = `linear-gradient(to right, ${sideColor} 8%, ${block.color} 18%, ${sideColor} 33%)`;
+    const gradient = `linear-gradient(to right, ${settings.color2} 8%, ${block.color} 18%, ${settings.color2} 33%)`;
     const shimmerClass = settings.animation ? 'shimmer' : '';
     const styleCode = settings.animation
       ? `background: '${gradient}', backgroundSize: '1000px 100%'`
@@ -112,41 +106,27 @@ ${blockDivs}
 }
 `;
 
-  let css = `
-.skeleton-container {
-  position: relative;
-  width: 500px;
-  height: 500px;
-  background: #f0f0f0;
-}
-.skeleton-block {
-  position: absolute;
-}
-`;
+  let css = generateCss;
+
   if (settings.animation) {
-    css += `
-@keyframes shimmer {
-  0%   { background-position: -500px 0; }
-  100% { background-position: 500px 0; }
-}
-.shimmer {
-  animation: shimmer 1.5s infinite linear;
-  /* Non definisco background qui, perché lo definiamo inline con gradient personalizzato per ogni blocco */
-}
-`;
+    css += generateAnimation;
   }
 
   return { markup, css };
 }
 
+/**
+ * Generates Angular code for the skeleton blocks.
+ *
+ * @param {Array} blocks - The blocks to generate code from.
+ * @param {Object} settings - The settings for code generation.
+ * @returns {Object} An object containing the markup and CSS.
+ */
 function generateAngular(blocks, settings) {
   const markup = `
 <div class="skeleton-container">
 ${blocks.map(block => {
-    // Calcoliamo la sfumatura “shimmer”
-    const sideColor = lightenColor(block.color, 0.2);
-    const gradient = `linear-gradient(to right, ${sideColor} 8%, ${block.color} 18%, ${sideColor} 33%)`;
-    // Se animazione attiva, aggiungiamo la classe "shimmer" e il gradient inline
+    const gradient = `linear-gradient(to right, ${settings.color2} 8%, ${block.color} 18%, ${settings.color2} 33%)`;
     const shimmerClass = settings.animation ? 'shimmer' : '';
     const styleStr = settings.animation
       ? `background: ${gradient}; background-size: 1000px 100%;`
@@ -177,39 +157,25 @@ export class SkeletonComponent {}
 -->
 `;
 
-  // CSS di base
-  let css = `
-.skeleton-container {
-  position: relative;
-  width: 500px;
-  height: 500px;
-  background: #f0f0f0;
-}
-.skeleton-block {
-  position: absolute;
-}
-`;
+  let css = generateCss;
 
-  // Se animazione attiva, aggiungiamo la keyframe e la classe shimmer
   if (settings.animation) {
-    css += `
-@keyframes shimmer {
-  0%   { background-position: -500px 0; }
-  100% { background-position: 500px 0; }
-}
-.shimmer {
-  animation: shimmer 1.5s infinite linear;
-}
-`;
+    css += generateAnimation;
   }
 
   return { markup, css };
 }
 
+/**
+ * Generates Vue code for the skeleton blocks.
+ *
+ * @param {Array} blocks - The blocks to generate code from.
+ * @param {Object} settings - The settings for code generation.
+ * @returns {Object} An object containing the markup and CSS.
+ */
 function generateVue(blocks, settings) {
   const blockDivs = blocks.map(block => {
-    const sideColor = lightenColor(block.color, 0.2);
-    const gradient = `linear-gradient(to right, ${sideColor} 8%, ${block.color} 18%, ${sideColor} 33%)`;
+    const gradient = `linear-gradient(to right, ${settings.color2} 8%, ${block.color} 18%, ${settings.color2} 33%)`;
     const shimmerClass = settings.animation ? 'shimmer' : '';
     return `
     <div
@@ -242,36 +208,25 @@ export default {
 </script>
 `;
 
-  let css = `
-.skeleton-container {
-  position: relative;
-  width: 500px;
-  height: 500px;
-  background: #f0f0f0;
-}
-.skeleton-block {
-  position: absolute;
-}
-`;
+  let css = generateCss;
+
   if (settings.animation) {
-    css += `
-@keyframes shimmer {
-  0%   { background-position: -500px 0; }
-  100% { background-position: 500px 0; }
-}
-.shimmer {
-  animation: shimmer 1.5s infinite linear;
-}
-`;
+    css += generateAnimation;
   }
 
   return { markup, css };
 }
 
+/**
+ * Generates Qwik code for the skeleton blocks.
+ *
+ * @param {Array} blocks - The blocks to generate code from.
+ * @param {Object} settings - The settings for code generation.
+ * @returns {Object} An object containing the markup and CSS.
+ */
 function generateQwik(blocks, settings) {
   const blockDivs = blocks.map(block => {
-    const sideColor = lightenColor(block.color, 0.2);
-    const gradient = `linear-gradient(to right, ${sideColor} 8%, ${block.color} 18%, ${sideColor} 33%)`;
+    const gradient = `linear-gradient(to right, ${settings.color2} 8%, ${block.color} 18%, ${settings.color2} 33%)`;
     const shimmerClass = settings.animation ? 'shimmer' : '';
     return `
       <div
@@ -302,17 +257,8 @@ ${blockDivs}
 });
 `;
 
-  let css = `
-.skeleton-container {
-  position: relative;
-  width: 500px;
-  height: 500px;
-  background: #f0f0f0;
-}
-.skeleton-block {
-  position: absolute;
-}
-`;
+  let css = generateCss;
+
   if (settings.animation) {
     css += `
 @keyframes shimmer {
@@ -328,10 +274,16 @@ ${blockDivs}
   return { markup, css };
 }
 
+/**
+ * Generates Svelte code for the skeleton blocks.
+ *
+ * @param {Array} blocks - The blocks to generate code from.
+ * @param {Object} settings - The settings for code generation.
+ * @returns {Object} An object containing the markup and CSS.
+ */
 function generateSvelte(blocks, settings) {
   const blockDivs = blocks.map(block => {
-    const sideColor = lightenColor(block.color, 0.2);
-    const gradient = `linear-gradient(to right, ${sideColor} 8%, ${block.color} 18%, ${sideColor} 33%)`;
+    const gradient = `linear-gradient(to right, ${settings.color2} 8%, ${block.color} 18%, ${settings.color2} 33%)`;
     const shimmerClass = settings.animation ? 'shimmer' : '';
     return `
     <div
@@ -362,36 +314,26 @@ ${blockDivs}
 </div>
 `;
 
-  let css = `
-.skeleton-container {
-  position: relative;
-  width: 500px;
-  height: 500px;
-  background: #f0f0f0;
-}
-.skeleton-block {
-  position: absolute;
-}
-`;
+  let css = generateCss;
+
   if (settings.animation) {
-    css += `
-@keyframes shimmer {
-  0%   { background-position: -500px 0; }
-  100% { background-position: 500px 0; }
-}
-.shimmer {
-  animation: shimmer 1.5s infinite linear;
-}
-`;
+    css += generateAnimation;
   }
 
   return { markup, css };
 }
 
-/** SVG (unico blocco) */
+/**
+ * Generates SVG code for the skeleton blocks.
+ *
+ * @param {Array} blocks - The blocks to generate code from.
+ * @param {Object} settings - The settings for code generation.
+ * @returns {string} The SVG markup.
+ */
 function generateSVG(blocks, settings) {
   const svgWidth = 500;
   const svgHeight = 500;
+
   const rects = blocks.map(block => `
     <rect
       x="${block.x}"
@@ -406,15 +348,18 @@ function generateSVG(blocks, settings) {
 
   return `
 <svg width="${svgWidth}" height="${svgHeight}" xmlns="http://www.w3.org/2000/svg">
-  <!-- Esempio animazione non implementata qui -->
   ${rects}
 </svg>
 `;
 }
 
 /**
- * getCodeParts(format) => { markup, css }
- * Se "svg", restituiamo { markup: [svgString], css: '' }
+ * Generates code parts (markup and CSS) based on the specified format.
+ *
+ * @param {string} format - The format to generate code for (e.g., 'HTML', 'REACT', 'ANGULAR', etc.).
+ * @param {Array} blocks - The blocks to generate code from.
+ * @param {Object} settings - The settings for code generation.
+ * @returns {Object} An object containing the markup and CSS.
  */
 export default function getCodeParts(format, blocks, settings) {
   switch (format) {

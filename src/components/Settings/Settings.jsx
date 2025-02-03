@@ -1,4 +1,12 @@
-import React, { useState } from 'react';
+/**
+ *
+ * Settings
+ *
+ * @author Vittorio Scaperrotta
+ * @date 22-Jan-2025
+*/
+
+import React from 'react';
 import Input from '@components/Input';
 import Field from '@components/Field';
 import Toggle from '@components/Toggle';
@@ -12,31 +20,54 @@ const Settings = ({
   selectedBlock,
   onUpdateBlock
 }) => {
-  // Gestione globale colore di default per i nuovi blocchi
+  /**
+   * Handle color change for the first color input.
+   *
+   * @param {Object} e - The event object.
+   */
   const handleColorChange1 = (e) => {
     setSettings(prev => ({ ...prev, color: e.target.value }));
   };
 
+  /**
+   * Handle color change for the second color input.
+   *
+   * @param {Object} e - The event object.
+   */
   const handleColorChange2 = (e) => {
     setSettings(prev => ({ ...prev, color2: e.target.value }));
   };
 
-  // Attiva/disattiva animazione globale
+  /**
+   * Toggle the global animation setting.
+   */
   const handleAnimationToggle = () => {
     setSettings(prev => ({ ...prev, animation: !prev.animation }));
   };
 
-  // Attiva/disattiva animazione globale
+  /**
+   * Handle change in animation speed.
+   *
+   * @param {Object} e - The event object.
+   */
   const handleChangeAnimationSpeed = (e) => {
     setSettings(prev => ({ ...prev, animationSpeed: e.target.value }));
   };
 
-  // Cambia il colore di sfondo della Board
+  /**
+   * Handle change in board background color.
+   *
+   * @param {Object} e - The event object.
+   */
   const handleBoardBgColorChange = (e) => {
     setSettings(prev => ({ ...prev, boardBgColor: e.target.value }));
   };
 
-  // Upload locale di un’immagine come base64
+  /**
+   * Handle upload of a background image.
+   *
+   * @param {Object} e - The event object.
+   */
   const handleBgImageUpload = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -49,10 +80,10 @@ const Settings = ({
     reader.readAsDataURL(file);
   };
 
-  // [NUOVO] Pulsante per rimuovere l’immagine di sfondo
+  /**
+   * Handle removal of the background image.
+   */
   const handleRemoveImage = () => {
-    console.log('here')
-
     setSettings(prev => ({
       ...prev,
       boardBgImage: '',
@@ -60,7 +91,11 @@ const Settings = ({
     }));
   };
 
-  // Gestione border radius del blocco selezionato
+  /**
+   * Handle change in border radius of the selected block.
+   *
+   * @param {Object} e - The event object.
+   */
   const handleRadiusChange = (e) => {
     const val = parseInt(e.target.value, 10) || 0;
     if (selectedBlock) {

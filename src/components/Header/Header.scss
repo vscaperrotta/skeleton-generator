@@ -14,6 +14,8 @@
   flex-direction: column;
   max-width: 80rem;
   padding: 6rem 0;
+  margin: 0 0 10rem;
+  position: relative;
   text-align: left;
   width: 100%;
 
@@ -39,6 +41,20 @@
     @include respond(tab-port) {
       align-items: flex-start;
       flex-direction: column;
+    }
+  }
+
+  .header__shapes {
+    position: absolute;
+
+    &.header__shapes--shape1 {
+      left: 55%;
+      top: 0;
+    }
+
+    &.header__shapes--shape2 {
+      left: 45%;
+      bottom: 0;
     }
   }
 

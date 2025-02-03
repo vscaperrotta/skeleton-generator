@@ -15,6 +15,7 @@
   width: 100%;
 
   .upload-image__label {
+    color: var(--input-label-color);
     font-size: .8rem;
     margin-bottom: 1.44rem;
     opacity: .7;
@@ -38,7 +39,7 @@
     }
 
     .upload-image__file-name {
-      color: #fff;
+      color: var(--input-value-color);
       font-size: .8rem;
       overflow: hidden;
       text-overflow: ellipsis;

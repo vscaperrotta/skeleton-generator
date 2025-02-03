@@ -16,49 +16,15 @@
   overflow: hidden;
   width: 100%;
 
-  .format-tabs,
-  .sub-tabs {
-    margin-bottom: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .format-tabs button,
-  .sub-tabs button {
-    padding: 8px 14px;
-    border: none;
-    background-color: #2d2d2d;
-    /* Tinta scura */
-    color: #bbb;
-    /* Colore testo */
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.2s, color 0.2s;
-  }
-
-  .format-tabs button:hover,
-  .sub-tabs button:hover {
-    background-color: #3c3c3c;
-    color: #fff;
-  }
-
-  .format-tabs button.active,
-  .sub-tabs button.active {
-    background-color: #007bff;
-    color: #fff;
-  }
-
-  .code-editor-container {
-    position: relative;
-    border-radius: 4px;
-    overflow: hidden;
+  .code-output__editor-container {
     background-color: #1e1e1e;
     flex: 1 0 auto;
+    position: relative;
+    overflow: hidden;
   }
 
   /* TEXTAREA stile “editor code” */
-  .code-editor {
+  .code-output__editor-textarea {
     display: block;
     width: 100%;
     min-height: 36.563rem;
@@ -69,14 +35,11 @@
     background-color: #1e1e1e;
     color: #d4d4d4;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
+    font-size: .8rem;
     line-height: 1.4;
     box-sizing: border-box;
     outline: none;
     flex: 1 0 auto;
-  }
-
-  .code-editor:focus {
-    outline: none;
+    width: 100%;
   }
 }

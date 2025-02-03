@@ -6,43 +6,6 @@
  *
  */
 
-.board__container {
-  border: .1rem solid #888;
-  border-radius: .5rem;
-  box-shadow: 0 .25rem .5rem rgba(0, 0, 0, .3);
-  position: relative;
-  min-height: 42.5rem;
-  position: relative;
-  width: 100%;
-
-  /* Se la griglia è attiva, aggiungiamo un background repeating. */
-  &.grid-active {
-    background-color: #fff;
-    background-image:
-      linear-gradient(to right, #eee .05rem, transparent .05rem),
-      linear-gradient(to bottom, #eee .05rem, transparent .05rem) !important;
-    background-size: 20px 20px !important;
-    background-position: top left !important;
-  }
-}
-
-
-/* Blocchi */
-.block {
-  box-sizing: border-box;
-  cursor: pointer;
-}
-
-/* Se un blocco è selezionato */
-.selected {
-  outline: .125rem solid #F12093;
-}
-
-/* Animazione "shimmer" base (usiamo background-position animato) */
-.shimmer {
-  animation: shimmer 1.5s infinite linear;
-}
-
 @keyframes shimmer {
   0% {
     background-position: -500px 0;
@@ -50,5 +13,53 @@
 
   100% {
     background-position: 500px 0;
+  }
+}
+
+.board__container {
+  border: .1rem solid var(--board-border-color);
+  border-radius: .5rem;
+  box-shadow: 0 .25rem .5rem rgba(0, 0, 0, .2);
+  min-height: 42.5rem;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+
+  .board__grid {
+    background-image:
+      linear-gradient(to right, #eee .05rem, transparent .05rem),
+      linear-gradient(to bottom, #eee .05rem, transparent .05rem);
+    background-size: 1.25rem 1.25rem;
+    background-position: top left;
+    display: none;
+    left: 0;
+    opacity: 1;
+    position: absolute;
+    min-height: 42.5rem;
+    top: 0;
+    width: 100%;
+
+    &.active {
+      display: block;
+    }
+
+    &--white-image {
+      opacity: .5;
+    }
+  }
+
+  .board__block {
+    box-sizing: border-box;
+    cursor: pointer;
+
+    &.selected {
+      outline: .1rem solid #00f;
+    }
+
+    &.shimmer {
+      animation: shimmer 1.5s infinite linear;
+      position: absolute;
+      background-size: 1500px 100% !important;
+    }
   }
 }
