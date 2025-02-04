@@ -25,9 +25,8 @@
     width: 100%;
 
     @include respond(tab-port) {
-      align-items: flex-start;
       flex-direction: column;
-      justify-content: flex-start;
+      justify-content: center;
       gap: 1rem;
     }
   }
