@@ -1,0 +1,29 @@
+/**
+ *
+ * Field Styles
+ *
+ * @version 1.0.0
+ *
+ * @author Vittorio Scaperrotta
+ * @since 22-Jan-2025
+*/
+
+.field__container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .field__label {
+    color: var(--input-label-color);
+    font-size: .8rem;
+    margin-bottom: 1.44rem;
+    opacity: .7;
+    white-space: nowrap;
+  }
+
+  .field__value {
+    color: var(--input-value-color);
+    font-size: 1rem;
+    font-weight: 700;
+  }
+}

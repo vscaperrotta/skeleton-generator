@@ -1,0 +1,31 @@
+
+import { fn } from "@storybook/test";
+import {{properCase componentName}} from './{{properCase componentName}}';
+
+export const ActionsData = {
+  {{!-- exampleProp: fn(), --}}
+};
+
+export default {
+  component: {{properCase componentName}},
+  title: 'Components/{{properCase componentName}}',
+  tags: ['autodocs'],
+  //👇 Our exports that end in "Data" are not stories.
+  excludeStories: /.*Data$/,
+  args: {
+    ...ActionsData,
+  },
+  parameters: {
+    docs: {
+      description: {
+        component: 'Another description, overriding the comments'
+      }
+    }
+  }
+};
+
+export const Default = {
+  args: {
+    {{!-- Props here... --}}
+  },
+};

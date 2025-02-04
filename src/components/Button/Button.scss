@@ -1,0 +1,41 @@
+/**
+ *
+ * Button Styles
+ *
+ * @version 1.0.0
+ *
+ * @author Vittorio Scaperrotta
+ * @since 22-Jan-2025
+*/
+
+.button {
+  background: rgba(255, 255, 255, 0);
+  border: 0;
+  color: var(--button-color);
+  font-weight: 700;
+  outline: 0;
+  padding: .2rem;
+  transition: all .1s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &--outlined {
+    border: .1rem solid var(--button_outlined-border);
+    border-radius: .5rem;
+    min-width: 12.5rem;
+    padding: .8rem;
+
+    &:hover {
+      background: linear-gradient(to top right, var(--primary-dark), var(--primary));
+      color: var(--button_outlined-hover-color);
+    }
+  }
+
+  &--text {
+    &:hover {
+      color: var(--button_text-hover-color);
+    }
+  }
+}

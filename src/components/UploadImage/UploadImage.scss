@@ -1,0 +1,67 @@
+/**
+ *
+ * UploadImage Styles
+ *
+ * @version 1.0.0
+ *
+ * @author Vittorio Scaperrotta
+ * @since 22-Jan-2025
+*/
+
+.upload-image__container {
+  display: flex;
+  flex-direction: column;
+  min-height: 4.375rem;
+  width: 100%;
+
+  .upload-image__label {
+    color: var(--input-label-color);
+    font-size: .8rem;
+    margin-bottom: 1.44rem;
+    opacity: .7;
+    white-space: nowrap;
+  }
+
+  .upload-image__content {
+    align-items: center;
+    background-color: var(--input-background);
+    border: .1rem solid var(--input-border-color);
+    border-radius: .25rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: 2.5rem;
+    padding: .4rem .5rem;
+    width: 100%;
+
+    input {
+      display: none;
+    }
+
+    .upload-image__file-name {
+      color: var(--input-value-color);
+      font-size: .8rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 13rem;
+      width: 100%;
+    }
+
+    .upload-image__button {
+      background-color: transparent;
+      border: 0;
+      color: var(--upload-document_button-color);
+      cursor: pointer;
+      font-size: .8rem;
+      font-weight: 700;
+      outline: 0;
+      padding: .1rem;
+      text-transform: uppercase;
+
+      &:hover {
+        filter: brightness(1.2);
+      }
+    }
+  }
+}

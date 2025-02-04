@@ -1,0 +1,96 @@
+:root {
+  --root-background-color: linear-gradient(to top right, #fff, #eee);
+  --root-text-color: #333;
+  --primary: #ff38ac;
+  --primary-dark: #952968;
+
+  // Home
+  --home-grid-stop-color: #000;
+
+  // Button
+  --button-color: var(--primary);
+  --button_outlined-border: var(--primary);
+  --button_outlined-hover-color: #fff;
+  --button_text-hover-color: #fff;
+
+  // Controller
+  --controller-icon-color: #000;
+  --controller-icon-active-color: #fff;
+  --controller-icon-hover-background: rgba(0, 0, 0, .1);
+  --controller-icon-hover-fill-color: #fff;
+  --controller-divider: #000;
+
+  // Header
+  --header_title-color: linear-gradient(to right, #333, #111);
+  --header_paragraph-color: linear-gradient(to right, #777, #888);
+
+  // Footer
+  --footer_paragraph-color: #888;
+
+  // Board
+  --board-border-color: #bbb;
+
+  // CodeOutput
+
+  // Input
+  --input-background: #eeeeee;
+  --input-label-color: #333;
+  --input-border-color: #888888;
+  --input-value-color: #333;
+
+  // Toggle
+  --toggle-background-color: var(--primary);
+
+  // UplaodDocument
+  --upload-document_button-color: var(--primary);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    // Global
+    --root-background-color: linear-gradient(to top right, #333, #111);
+    --root-text-color: #fff;
+    --primary: #17D4A8;
+    --primary-dark: #0C6E57;
+
+    // Home
+    --home-grid-stop-color: #fff;
+
+    // Button
+    --button-color: var(--primary);
+    --button_outlined-border: var(--primary);
+    --button_text-hover-color: #fff;
+    --button_outlined-hover-color: #fff;
+
+    // Controller
+    --controller-icon-color: #fff;
+    --controller-icon-active-color: #fff;
+    --controller-icon-hover-background: rgba(255, 255, 255, .2);
+    --controller-icon-hover-fill-color: #fff;
+    --controller-divider: #fff;
+
+    // Header
+    --header_title-color: linear-gradient(to right, #fff, #ccc);
+    --header_paragraph-color: linear-gradient(to right, #777, #888);
+
+    // Footer
+    --footer_paragraph-color: #888;
+
+    // Board
+    --board-border-color: #888;
+
+    // CodeOutput
+
+    // Input
+    --input-background: #404040;
+    --input-label-color: #fff;
+    --input-border-color: #888888;
+    --input-value-color: #fff;
+
+    // Toggle
+    --toggle-background-color: var(--primary);
+
+    // UplaodDocument
+    --upload-document_button-color: var(--primary);
+  }
+}

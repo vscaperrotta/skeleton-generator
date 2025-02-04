@@ -1,0 +1,75 @@
+/**
+ *
+ * Tabs Styles
+ *
+ * @version 1.0.0
+ *
+ * @author Vittorio Scaperrotta
+ * @since 22-Jan-2025
+*/
+
+/* Style the tab */
+.tabs__containers {
+  background-color: #444444;
+  display: flex;
+  width: 100%;
+
+  &--markup {
+    overflow: hidden;
+    padding: 0;
+
+    button {
+      background-color: transparent;
+      padding: .8rem 1.5rem;
+      border: 0;
+      color: #ccc;
+      cursor: pointer;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.3s;
+
+      &:hover {
+        color: #fff;
+      }
+
+      &.active {
+        background-color: #ff38ac;
+        color: #fff;
+        font-weight: 700;
+      }
+    }
+  }
+
+  &--languages {
+    gap: 2rem;
+    overflow: hidden;
+    padding: 1rem 2rem;
+
+    button {
+      background-color: transparent;
+      border: 0;
+      color: #ccc;
+      cursor: pointer;
+      font-size: 1rem;
+      outline: none;
+      padding: 0;
+      transition: 0.3s;
+
+      &:hover {
+        color: #fff;
+      }
+
+      &.active {
+        color: #17D4A8;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: .1rem solid #ccc;
+    border-top: none;
+  }
+}

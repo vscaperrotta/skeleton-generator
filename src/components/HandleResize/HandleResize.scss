@@ -1,0 +1,25 @@
+/**
+ *
+ * HandleResize Styles
+ *
+ * @version 1.0.0
+ *
+ * @author Vittorio Scaperrotta
+ * @since 31-Jan-2025
+*/
+
+
+/* Maniglie di resize */
+.resize-handle {
+  background-color: #fff;
+  border: .1rem solid #00f;
+  cursor: nwse-resize;
+  height: .5rem;
+  width: .5rem;
+  position: absolute;
+  z-index: 10;
+}
+
+.resize-handle:hover {
+  background-color: #f0f0f0;
+}

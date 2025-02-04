@@ -1,0 +1,27 @@
+/**
+ *
+ * {{properCase routeName}}
+ *
+ * @author {{username}}
+ * @date {{date}}
+*/
+
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { nullSafe } from '@utils/globalMethods';
+import './{{properCase routeName}}.scss';
+
+const {{properCase routeName}} = () => {
+  const dispatch = useDispatch();
+  const state = useSelector(state => nullSafe(() => state, null));
+
+  useEffect(() => {
+    // Code here..
+  }, []);
+
+  return (
+    <h1>{{properCase routeName}}</h1>
+  )
+}
+
+export default {{properCase routeName}};

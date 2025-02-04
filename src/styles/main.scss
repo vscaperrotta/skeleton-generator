@@ -1,0 +1,68 @@
+// Import global configuration settings such as variables and mixins.
+@import "./config/index.scss";
+
+// Import layout styles defining the structure and overall page organization.
+@import "./layout/index.scss";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+#root {
+  background: var(--root-background-color);
+  color: var(--root-text-color);
+  font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1.2rem;
+  height: 100%;
+  letter-spacing: 0.05rem;
+  margin: 0;
+  min-height: 100vh;
+  padding: 0;
+  position: relative;
+
+  b {
+    font-weight: 600;
+  }
+}
+
+// a,
+// button,
+// input,
+// textarea {
+//   font-family: $font-family-regular;
+// }
+
+input {
+  // hide Spinner in Input Number for firefox
+  appearance: textfield;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  transition: background-color 5000s ease-in-out 0s; // avoid webkit-autofill browser background color
+}
+
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  // hide Spinner in Input Number for every browser except firefox
+  margin: 0;
+}
+
+input::-ms-clear {
+  display: none;
+}

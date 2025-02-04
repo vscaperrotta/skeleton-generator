@@ -1,0 +1,78 @@
+/**
+ *
+ * Settings Styles
+ *
+ * @version 1.0.0
+ *
+ * @author Vittorio Scaperrotta
+ * @since 21-Jan-2025
+*/
+
+.settings__container {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-areas:
+    "block skeleton"
+    "block background";
+  grid-template-columns: 30% 1fr;
+  grid-template-rows: 1fr 1fr;
+
+  @include respond(tab-land) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "block"
+      "block"
+      "skeleton"
+      "background";
+  }
+
+  .settings__placeholder {
+    grid-area: placeholder;
+  }
+
+  .setting__single-item-placeholder {
+    font-size: 1rem;
+    font-style: italic;
+    opacity: .5;
+    width: 100%;
+  }
+
+  .settings__section-title {
+    font-size: 1rem;
+    margin-bottom: 1.375rem;
+  }
+
+  .settings__skeleton {
+    grid-area: skeleton;
+    width: 100%;
+
+    .settings__skeleton-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+  }
+
+  .settings__background {
+    gap: 1.5rem;
+    grid-area: background;
+
+    .settings__background-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: 25% 1fr;
+    }
+  }
+
+  .settings__block {
+    gap: 1.5rem;
+    grid-area: block;
+
+    .settings__block-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}

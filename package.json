@@ -1,0 +1,72 @@
+{
+  "name": "skeleton-generator",
+  "displayName": "Skeleton Generator",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Tool to generate skeleton for different JS frameworks",
+  "main": "index.jsx",
+  "author": "Vittorio Scaperrotta",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 20.18.0",
+    "npm": ">= 10.8.2"
+  },
+  "packageManager": "yarn@4.5.0",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "generate": "plop --plopfile=generators/index.js",
+    "dev:storybook": "storybook dev -p 6006"
+  },
+  "browserslist": {
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.5.0",
+    "axios": "^1.7.9",
+    "eslint": "^9.18.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.2.2",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-redux-saga": "^1.3.2",
+    "formik": "^2.4.6",
+    "immer": "^10.1.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.1.1",
+    "react-use": "^17.6.0",
+    "redux-saga": "^1.3.0",
+    "storybook": "^8.5.0",
+    "yup": "^1.6.1"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^8.5.0",
+    "@storybook/addon-interactions": "^8.5.0",
+    "@storybook/addon-links": "^8.5.0",
+    "@storybook/blocks": "^8.5.0",
+    "@storybook/manager-api": "^8.5.0",
+    "@storybook/react": "^8.5.0",
+    "@storybook/react-vite": "^8.5.0",
+    "@storybook/test": "^8.5.0",
+    "@storybook/theming": "^8.5.0",
+    "@types/react": "^19.0.7",
+    "@types/react-dom": "^19.0.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "better-npm-run": "^0.1.1",
+    "chalk": "^5.4.1",
+    "plop": "^4.0.1",
+    "prettier": "^3.4.2",
+    "sass": "^1.83.4",
+    "terser": "^5.37.0",
+    "vite": "^6.0.7",
+    "vite-plugin-eslint": "^1.8.1"
+  }
+}

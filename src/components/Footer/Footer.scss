@@ -1,0 +1,32 @@
+/**
+ *
+ * Footer Styles
+ *
+ * @version 1.0.0
+ *
+ * @author Vittorio Scaperrotta
+ * @since 21-Jan-2025
+*/
+
+.footer__container {
+  border-top: .1rem solid #888;
+  display: flex;
+  min-height: 12.5rem;
+  padding: 0 3.75rem;
+  width: 100%;
+
+  .footer__content {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin: 0 auto;
+    max-width: 80rem;
+    width: 100%;
+  }
+
+  .footer__paragraph {
+    color: var(--footer_paragraph-color);
+    font-size: .8rem;
+  }
+}

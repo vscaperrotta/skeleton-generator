@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  frontend:
+    build: .
+    container_name: "vite-frontend"
+    ports:
+      - "5173:5173"
+    # Se hai bisogno di variabili d'ambiente, puoi aggiungerle qui:
+    # environment:
+    #   REACT_APP_API_URL: "https://example.com/api"
+    # Se vuoi fare override del CMD impostato nel Dockerfile, puoi aggiungere 'command':
+    # command: ["yarn", "dev", "--host", "0.0.0.0"]

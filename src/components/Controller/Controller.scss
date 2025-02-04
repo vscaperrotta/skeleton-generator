@@ -1,0 +1,115 @@
+/**
+ *
+ * Controller Styles
+ *
+ * @version 1.0.0
+ *
+ * @author vittorioscaperrotta
+ * @since 30-Jan-2025
+*/
+
+.controller__container {
+  align-items: center;
+  background-color: var(--input-background);
+  box-shadow: 0 .25rem .5rem rgba(0, 0, 0, .3);
+  border-radius: .5rem;
+  bottom: 1rem;
+  display: flex;
+  border-radius: .25rem;
+  gap: .5rem;
+  justify-content: center;
+  left: 50%;
+  padding: .5rem;
+  position: absolute;
+  transform: translateX(-50%);
+
+  .divider {
+    background-color: var(--controller-divider);
+    height: 1.5rem;
+    opacity: .3;
+    width: .1rem;
+  }
+
+  .controller__button {
+    align-items: center;
+    border: 0;
+    border-radius: .25rem;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    height: 2rem;
+    outline: none;
+    padding: .25rem;
+    position: relative;
+    transition: all .2s ease-in-out;
+    width: 2rem;
+
+    svg {
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    path {
+      fill: var(--controller-icon-color);
+    }
+
+    &:hover {
+      background-color: var(--controller-icon-hover-background);
+    }
+
+    &.active {
+
+      path {
+        fill: var(--controller-icon-active-color);
+      }
+
+      &:hover {
+        filter: brightness(1.2);
+      }
+    }
+
+    &.editing {
+
+      svg {
+        left: 46%;
+        top: 46%;
+      }
+
+      &.active {
+        background: linear-gradient(to top right, #0C6E57, #17D4A8);
+      }
+    }
+
+    &.create {
+      &.active {
+        background: linear-gradient(to top right, #0C6E57, #17D4A8);
+      }
+    }
+
+    &.functionality {
+      &.active {
+        background: linear-gradient(to top right, #0c4d6e, #178bd4);
+      }
+    }
+
+    &.clear {
+
+      &:hover,
+      &:focus {
+        background: linear-gradient(to top right, #6E0C0C, #D41717);
+
+        path {
+          fill: #fff;
+        }
+      }
+
+      &:active {
+        background: linear-gradient(to top right, #6E0C0C, #D41717);
+        filter: brightness(1.2);
+      }
+    }
+  }
+}
