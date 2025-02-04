@@ -19,10 +19,17 @@
     align-items: center;
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: space-between;
     margin: 0 auto;
     max-width: 80rem;
     width: 100%;
+
+    @include respond(tab-port) {
+      align-items: flex-start;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 1rem;
+    }
   }
 
   .footer__paragraph {
