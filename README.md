@@ -11,4 +11,4 @@ On the right hand side, the user is then offered the output of the code in diffe
 
 Finally, below the drawing board are settings with which to customise the board and the shapes, such as colour, animation and border radius.
 
-You can visit the skeleton-generator at this [link](https://skeleton-generator-topaz.vercel.app/).
+You can visit the skeleton-generator at this [link](https://skeleton-generator-ui.vercel.app/).
